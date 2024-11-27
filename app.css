@@ -1,3 +1,112 @@
 body {
+<<<<<<< HEAD
   background-color: blue;
+=======
+  font-family: "Rubik", sans-serif !important;
+  font-weight: 100 !important;
+}
+#main {
+  max-width: 960px;
+  margin: 0 auto;
+  background-color: white;
+}
+
+#navbar {
+  background-color: #007bff !important;
+}
+#navcon {
+  max-width: 960px !important;
+}
+
+.btnSearch {
+  background-color: #03045e !important;
+  color: white !important;
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.btnSearch:hover {
+  transform: scale(1.01) !important;
+  box-shadow: 0 0 10px #0077b6 !important;
+  transition: box-shadow 0.05s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.btnSearch:active {
+  background-color: #00296b !important;
+  color: white !important;
+  transition: background-color 0.15s ease-in-out !important;
+}
+
+.formSearch {
+  border-radius: 8px !important;
+  border: none !important;
+  color: #03045e;
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.formSearch::placeholder {
+  color: #03045e !important;
+}
+
+.formSearch:focus {
+  outline: none !important;
+  box-shadow: 0 0 10px #0077b6 !important;
+}
+
+.gradient {
+  height: 150vh;
+  background: linear-gradient(
+    60deg,
+    #caf0f8,
+    #64b5f6,
+    #bbdefb,
+    #bde0fe,
+    #a2d2ff,
+    #ffffff
+  );
+  background-size: 200%;
+  animation: bgAnimatedGradient 15s infinite linear;
+}
+
+@keyframes bgAnimatedGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.nav-link {
+  color: white !important;
+}
+
+#navbar .navbar-brand img {
+  max-height: 1.6em; /* Adjust logo size */
+}
+
+.navbar-brand {
+  color: white !important;
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+.container:last-of-type {
+  max-width: 960px;
+}
+
+@media (max-width: 768px) {
+  .formSearch {
+    width: 100%;
+  }
+
+  .btnSearch {
+    width: 100%;
+  }
+>>>>>>> 53798258dad5fbc7b08523931031d7d54e0d7c39
 }
