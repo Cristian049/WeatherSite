@@ -3,13 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<<<<<<< HEAD
-    <title>Weather</title>
-    <link rel="stylesheet" href="app.css" />
-  </head>
-  <body>
-    <script src="app.js"></script>
-=======
     <meta
       name="description"
       content="Weather AC provides weather updates all over the world."
@@ -23,6 +16,10 @@
     <link rel="icon" type="image/png" href="cloudy.png" />
     <link rel="stylesheet" href="app.css" />
 
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -75,6 +72,7 @@
               type="search"
               placeholder="Search"
               aria-label="Search"
+              name="city"
             />
             <button
               class="btn btn-outline-success btnSearch"
@@ -86,16 +84,17 @@
         </div>
       </div>
     </nav>
+
     <div class="gradient">
+      <div class="container d-flex justify-content-center" id="btnList">
+        <div class="btnList">
+          <button class="currentForcast custom-btn">Current</button>
+          <button class="hourlyForecast custom-btn">Hourly</button>
+          <button class="dailyForecast custom-btn">Daily</button>
+        </div>
+      </div>
       <div class="container d-flex justify-content-center" id="main">
-        <p class="lorem">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. In laborum
-          maiores, sapiente odio quae non, porro asperiores consequatur ratione,
-          officia hic distinctio atque ut nesciunt accusantium dicta deserunt!
-          Adipisci, placeat dolore optio voluptate iure ad atque laboriosam
-          natus reiciendis fuga doloribus alias voluptas illum, eos iste
-          nesciunt, mollitia quia similique?
-        </p>
+        <div class="weather"></div>
       </div>
     </div>
 
@@ -126,12 +125,14 @@
       </footer>
     </div>
 
-    <script src="app.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
->>>>>>> 53798258dad5fbc7b08523931031d7d54e0d7c39
+    <script src="app.js"></script>
   </body>
 </html>
