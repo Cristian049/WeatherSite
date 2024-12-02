@@ -18,11 +18,15 @@ const weatherContainer = document.querySelector(".weather");
 
 class WeatherDataDaily {
   constructor(apiResponse) {
-    const dataRes = apiResponse.data[0];
+    const dataRes = apiResponse.data && apiResponse.data[0];
     this.city = dataRes.city_name;
     this.temperature = dataRes.temp;
     this.condition = dataRes.weather.description;
     this.icon = dataRes.weather.icon;
+    this.country = dataRes.country_code;
+    this.timezone = dataRes.timezone;
+    this.humidity = dataRes.rh;
+    this.windSpeed = dataRes.wind_spd;
   }
   getWeatherIcon() {
     return `https://www.weatherbit.io/static/img/icons/${this.icon}.png`;
@@ -34,16 +38,33 @@ class WeatherCardDaily {
     this.weatherData = weatherData;
   }
   render() {
+    const timezone = this.weatherData.timezone || "UTC";
+    const localTime = new Date().toLocaleString("en-US", {
+      timeZone: timezone,
+    });
     const card = document.createElement("div");
     card.className = "weather-card";
 
     card.innerHTML = `
-        <h2>${this.weatherData.city}</h2>
-        <p>${this.weatherData.temperature}°C</p>
-        <p>${this.weatherData.condition}</p>
-        <img src="${this.weatherData.getWeatherIcon()}" alt="${
+       <div class="weather-header">
+        <h5 id="city-name">${this.weatherData.city}</h5 >
+        <h5 id="local-time">${localTime}</h5>
+      </div>
+      <div class="weather-info">
+        <img id="weather-icon" src="${this.weatherData.getWeatherIcon()}" alt="${
       this.weatherData.condition
     }">
+        <p id="temperature">${this.weatherData.temperature}°C</p>
+        <p id="condition">${this.weatherData.condition}</p>
+      </div>
+      <div class="additional-info">
+        <p>Humidity: <span id="humidity">${
+          this.weatherData.humidity
+        }%</span></p>
+        <p>Wind: <span id="wind-speed">${
+          this.weatherData.windSpeed
+        } km/h</span></p>
+      </div>
     `;
 
     return card;
