@@ -13,9 +13,16 @@
     />
     <meta name="author" content="Weather AC" />
     <title>Weather AC</title>
-    <link rel="icon" type="image/png" href="cloudy.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="images/sunfavpng_1733236657-trimmy-Lovepik_com-401706139-sun.png"
+    />
     <link rel="stylesheet" href="app.css" />
-
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search"
+    />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -39,13 +46,13 @@
     />
   </head>
   <body>
-    <nav
-      class="navbar navbar-expand-lg bg-body-tertiary sticky-top"
-      id="navbar"
-    >
-      <div class="container d-flex justify-content-center" id="navcon">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" id="navbar">
+      <div class="container d-flex justify-content-center gx-0" id="navcon">
         <a class="navbar-brand" href="index.html">
-          <img src="icons8-sun-48.png" alt="Weather AC Logo" />Weather AC
+          <img
+            src="images/sunfavpng_1733236657-trimmy-Lovepik_com-401706139-sun.png"
+            alt="Weather AC Logo"
+          /><span class="nav-name">Weather AC</span>
         </a>
         <button
           class="navbar-toggler ms-auto"
@@ -67,27 +74,26 @@
               <a class="nav-link" href="#">Link</a>
             </li>
           </ul>
-          <form class="d-flex fSearch ms-auto" role="search">
-            <input
-              class="form-control me-2 formSearch"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              name="city"
-            />
-            <button
-              class="btn btn-outline-success btnSearch"
-              aria-label="Search Button"
-            >
-              Search
-            </button>
+          <form class="form-search" role="search">
+            <div class="search">
+              <span class="material-symbols-outlined icon-search">
+                search
+              </span>
+              <input
+                class="me-2 input-search"
+                type="search"
+                placeholder="Search "
+                aria-label="Search"
+                name="city"
+              />
+            </div>
           </form>
         </div>
       </div>
     </nav>
 
     <div class="gradient">
-      <div class="container d-flex justify-content-center" id="btnList">
+      <div class="container d-flex justify-content-center gx-0" id="btnList">
         <div class="btnList">
           <button class="currentForcast custom-btn">Current</button>
           <button class="hourlyForecast custom-btn">Hourly</button>
@@ -95,7 +101,27 @@
         </div>
       </div>
       <div class="container gx-0" id="main">
-        <div class="weather"></div>
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="weather"></div>
+          </div>
+          <div class="col-sm-4">
+            <div class="ads-col">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error
+              ipsam ratione voluptates sit, possimus aliquam. Nobis beatae ipsa
+              veritatis dolorum dolores incidunt facere, saepe nulla inventore,
+              temporibus perspiciatis reprehenderit hic quam alias placeat earum
+              suscipit. Iure, mollitia soluta! Libero exercitationem officiis
+              harum veritatis! Debitis minima et voluptas! Consequuntur, hic
+              laudantium beatae sit animi cum deleniti eaque quis! Eos
+              reprehenderit, quae nesciunt repellendus, cum laudantium dolore
+              delectus magni, nulla amet consequuntur ipsum? Expedita, quam.
+              Culpa, illum dignissimos? Dolor quam dolorem temporibus unde fuga
+              laborum cum ab amet, dignissimos, earum omnis consequuntur placeat
+              voluptatibus expedita ut rem sit neque? Aut, eius iure!
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
