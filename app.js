@@ -10,11 +10,129 @@
 const inputSearch = document.querySelector("input");
 const form = document.querySelector("form");
 const weatherContainer = document.querySelector(".weather");
+const animatedWeatherIcons = {
+  c01d: "images/all/clear-day.svg",
+  c01n: "images/all/clear-night.svg",
+  c02d: "images/all/partly-cloudy-day.svg",
+  c02n: "images/all/partly-cloudy-night.svg",
+  c03d: "images/all/overcast-day.svg",
+  c03n: "images/all/overcast-night.svg",
+  c04d: "images/all/overcast.svg",
+  c04n: "images/all/overcast.svg",
+  r01d: "images/all/partly-cloudy-day-drizzle.svg",
+  r01n: "images/all/partly-cloudy-day-drizzle.svg",
+  f01d: "images/all/hail.svg",
+  f01n: "images/all/hail.svg",
+  r02d: "images/all/rain.svg",
+  r02n: "images/all/rain.svg",
+  r03d: "images/all/rain.svg",
+  r03n: "images/all/rain.svg",
+  r04d: "images/all/partly-cloudy-day-drizzle.svg",
+  r04n: "images/all/partly-cloudy-night-drizzle.svg",
+  r05d: "images/all/rain.svg",
+  r05n: "images/all/rain.svg",
+  r06d: "images/all/rain.svg",
+  r06n: "images/all/rain.svg",
+  s01d: "images/all/partly-cloudy-day-snow.svg",
+  s01n: "images/all/partly-cloudy-night-snow.svg",
+  s02d: "images/all/snow.svg",
+  s02n: "images/all/snow.svg",
+  s03d: "images/all/snow.svg",
+  s03n: "images/all/snow.svg",
+  s04d: "images/all/partly-cloudy-day-sleet.svg",
+  s04n: "images/all/partly-cloudy-night-sleet.svg",
+  s05d: "images/all/sleet.svg",
+  s05n: "images/all/sleet.svg",
+  s06d: "images/all/partly-cloudy-day-snow.svg",
+  s06n: "images/all/partly-cloudy-night-snow.svg",
+  t01d: "images/all/thunderstorms-day.svg",
+  t01n: "images/all/thunderstorms-night.svg",
+  s01d: "images/all/snow-day.svg",
+  s01n: "images/all/snow-night.svg",
+  t01d: "images/all/thunderstorms-day-rain.svg",
+  t01n: "images/all/thunderstorms-night-rain.svg",
+  t02d: "images/all/thunderstorms-day-rain.svg",
+  t02n: "images/all/thunderstorms-night-rain.svg",
+  t03d: "images/all/thunderstorms-day-rain.svg",
+  t03n: "images/all/thunderstorms-night-rain.svg",
+  t04d: "images/all/thunderstorms-day.svg",
+  t04n: "images/all/thunderstorms-night.svg",
+  t05d: "images/all/thunderstorms-day.svg",
+  t05n: "images/all/thunderstorms-night.svg",
+  a01d: "images/all/mist.svg",
+  a01n: "images/all/mist.svg",
+  a02d: "images/all/partly-cloudy-day-smoke.svg",
+  a02n: "images/all/partly-cloudy-night-smoke.svg",
+  a03d: "images/all/partly-cloudy-day-haze.svg",
+  a03n: "images/all/partly-cloudy-night-haze.svg",
+  a04d: "images/all/dust.svg",
+  a04n: "images/all/dust.svg",
+  a05d: "images/all/fog.svg",
+  a05n: "images/all/fog.svg",
+  a06d: "images/all/drizzle.svg",
+  a06n: "images/all/drizzle.svg",
+  d01d: "images/all/drizzle.svg",
+  d01n: "images/all/drizzle.svg",
+  d02d: "images/all/drizzle.svg",
+  d02n: "images/all/drizzle.svg",
+  d03d: "images/all/drizzle.svg",
+  d03n: "images/all/drizzle.svg",
+  u00d: "images/all/not-available.svg",
+  u00n: "images/all/not-available.svg",
+};
 
-// Fetch weather data for Craiova when the page loads
-// window.onload = function () {
-//   fetchWeatherData(); // Fetch default weather for Craiova
-// };
+const featuredCities = [
+  { city: "New York", country: "US" },
+  { city: "Tokyo", country: "JP" },
+  { city: "London", country: "GB" },
+  { city: "Paris", country: "FR" },
+  { city: "Sydney", country: "AU" },
+  { city: "Cape Town", country: "ZA" },
+  { city: "Moscow", country: "RU" },
+  { city: "Beijing", country: "CN" },
+  { city: "Dubai", country: "AE" },
+  { city: "Rio de Janeiro", country: "BR" },
+  { city: "Mumbai", country: "IN" },
+  { city: "Mexico City", country: "MX" },
+  { city: "Bangkok", country: "TH" },
+  { city: "Berlin", country: "DE" },
+  { city: "Singapore", country: "SG" },
+  { city: "Los Angeles", country: "US" },
+  { city: "Buenos Aires", country: "AR" },
+  { city: "Seoul", country: "KR" },
+  { city: "Toronto", country: "CA" },
+  { city: "Rome", country: "IT" },
+  { city: "Istanbul", country: "TR" },
+  { city: "Athens", country: "GR" },
+  { city: "Nairobi", country: "KE" },
+  { city: "Cairo", country: "EG" },
+  { city: "Hong Kong", country: "HK" },
+  { city: "San Francisco", country: "US" },
+  { city: "Vancouver", country: "CA" },
+  { city: "Jakarta", country: "ID" },
+  { city: "Lagos", country: "NG" },
+  { city: "Chicago", country: "US" },
+  { city: "Santiago", country: "CL" },
+  { city: "Lisbon", country: "PT" },
+  { city: "Kuala Lumpur", country: "MY" },
+  { city: "Stockholm", country: "SE" },
+  { city: "Oslo", country: "NO" },
+  { city: "Warsaw", country: "PL" },
+  { city: "Vienna", country: "AT" },
+  { city: "Helsinki", country: "FI" },
+  { city: "Copenhagen", country: "DK" },
+  { city: "Madrid", country: "ES" },
+  { city: "Zürich", country: "CH" },
+  { city: "Manila", country: "PH" },
+  { city: "Bogotá", country: "CO" },
+  { city: "Lima", country: "PE" },
+  { city: "Tehran", country: "IR" },
+  { city: "Baghdad", country: "IQ" },
+  { city: "Karachi", country: "PK" },
+  { city: "Addis Ababa", country: "ET" },
+  { city: "Havana", country: "CU" },
+  { city: "Amman", country: "JO" },
+];
 
 function formatTime() {
   const now = new Date();
@@ -28,34 +146,6 @@ function formatTime() {
   return `${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
-function getWeatherCardClass(condition) {
-  switch (condition.toLowerCase()) {
-    case "clear sky":
-      return "clear-day";
-    case "few clouds":
-    case "scattered clouds":
-    case "broken clouds":
-    case "overcast clouds":
-      return "cloudy";
-    case "light rain":
-    case "rain":
-    case "shower rain":
-      return "rainy";
-    case "snow":
-    case "light snow":
-      return "snowy";
-    case "thunderstorm":
-      return "thunderstorm";
-    case "fog":
-    case "mist":
-      return "foggy";
-    case "wind":
-    case "windy":
-      return "windy";
-    default:
-      return "night";
-  }
-}
 class WeatherDataDaily {
   constructor(apiResponse) {
     const dataRes = apiResponse.data && apiResponse.data[0];
@@ -71,7 +161,7 @@ class WeatherDataDaily {
     this.pressure = dataRes.pres;
   }
   getWeatherIcon() {
-    return `https://www.weatherbit.io/static/img/icons/${this.icon}.png`;
+    return animatedWeatherIcons[this.icon] || "images/all/default-icon.svg";
   }
 }
 
@@ -79,12 +169,11 @@ class WeatherCardDaily {
   constructor(weatherData) {
     this.weatherData = weatherData;
   }
-  render() {
+  renderCurrent() {
     const countryCode = this.weatherData.country;
     const currentTime = formatTime();
     const card = document.createElement("div");
-    const weatherClass = getWeatherCardClass(this.weatherData.condition);
-    card.className = `weather-card ${weatherClass}`;
+    card.className = `weather-card`;
 
     card.innerHTML = `
        <div class="weather-header">
@@ -137,11 +226,42 @@ form.addEventListener("submit", async function (e) {
       const res = await axios.get(`${baseUrl}?city=${inputVal}&key=${apiKey}`);
       const weatherData = new WeatherDataDaily(res.data);
       const weatherCard = new WeatherCardDaily(weatherData);
-
-      weatherContainer.append(weatherCard.render());
+      weatherContainer.innerHTML = "";
+      weatherContainer.append(weatherCard.renderCurrent());
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
   }
   form.reset();
+});
+
+function getRandomCities(numberOfCities) {
+  const shuffledCities = [...featuredCities];
+  for (let i = shuffledCities.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledCities[i], shuffledCities[j]] = [
+      shuffledCities[j],
+      shuffledCities[i],
+    ];
+  }
+  return shuffledCities.slice(0, numberOfCities);
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+  const selectedCities = getRandomCities(6);
+  weatherContainer.innerHTML = "";
+
+  for (let city of selectedCities) {
+    try {
+      const res = await axios.get(
+        `https://api.weatherbit.io/v2.0/current?city=${city.city}&country=${city.country}&key=0b5eac87736d4cab95709976b8c2e278`
+      );
+      const weatherDataOnload = new WeatherDataDaily(res.data);
+      const weatherCardOnload = new WeatherCardDaily(weatherDataOnload);
+      weatherContainer.append(weatherCardOnload.renderCurrent());
+    } catch (error) {
+      console.error(`Error fetching weather data for ${city.city}:`, error);
+      weatherContainer.innerHTML += `<p>Error fetching weather data for ${city.city}.</p>`;
+    }
+  }
 });

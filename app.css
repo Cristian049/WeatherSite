@@ -106,6 +106,8 @@ input[type="search"]::-webkit-search-results-decoration {
   max-width: 960px;
   margin: 1em auto;
   border-radius: var(--border-radius) !important;
+  display: grid;
+  grid-template-areas: "weather-cont ads-cont";
 }
 
 .gradient {
@@ -173,7 +175,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .weather-card {
-  background-color: white;
+  background-color: rgb(195, 195, 255);
   color: black;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -243,11 +245,14 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .weather-icon {
+  width: 120px;
+  height: 120px;
+  margin-left: -4em;
   margin-right: 12px;
 }
 
 .weather-temp .temperature {
-  font-size: 5.5rem;
+  font-size: 5rem;
   font-weight: 700;
 }
 
@@ -273,7 +278,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .ads-col {
-  background-color: white;
+  background-color: aqua;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -284,42 +289,25 @@ input[type="search"]::-webkit-search-results-decoration {
 footer a:hover {
   text-decoration: underline;
 }
-/* FOOTER */
 
-@media (max-width: 568px) {
-  .temp-circle {
-    font-size: 3.5rem;
-    margin-left: -5px;
-  }
-  .weather-description {
-    font-size: 14px;
-  }
-  .spaced-content {
-    padding: 8px 0;
-  }
-  .table-value {
-    font-size: 13px;
-  }
-  #condition {
-    font-size: 12px;
-  }
-  .celsius {
-    font-size: 16px;
-  }
-  .weather-temp .temperature {
-    font-size: 4rem;
-  }
-  .weather-temp .real-feel {
-    font-size: 14px;
-  }
-  .weather-icon {
-    margin-right: 0;
-    width: 80px;
-    height: 80px;
-  }
+footer ul {
+  border-bottom: 1px solid #b3b3b3 !important;
 }
 
-@media (max-width: 1024px) {
+footer a {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+
+.footer-cont {
+  max-width: 960px !important;
+}
+/* FOOTER */
+
+@media (max-width: 990px) {
+  #navcon {
+    margin: 0 12px;
+  }
   #main {
     padding: 0 12px;
   }
@@ -328,6 +316,15 @@ footer a:hover {
   }
   .weather-temps {
     margin-bottom: 0;
+  }
+  .weather-icon {
+    margin-right: 0;
+  }
+  .weather-temp .temperature {
+    font-size: 4.5rem;
+  }
+  .temp-circle {
+    font-size: 4.5rem;
   }
 }
 
@@ -342,5 +339,75 @@ footer a:hover {
     padding: 6px 12px;
     font-size: 18px;
     opacity: 70%;
+  }
+  .weather-description {
+    font-size: 16px;
+  }
+  .spaced-content {
+    padding: 8px 0;
+  }
+  .table-value {
+    font-size: 15px;
+  }
+  #condition {
+    font-size: 14px;
+  }
+  .celsius {
+    font-size: 18px;
+  }
+  .weather-temp .temperature {
+    font-size: 4rem;
+  }
+  .temp-circle {
+    font-size: 4rem;
+  }
+  .weather-temp .real-feel {
+    font-size: 16px;
+  }
+  .weather-icon {
+    width: 100px;
+    height: 100px;
+  }
+  .additional-info {
+    width: 75%;
+  }
+}
+
+@media (max-width: 568px) {
+  .temp-circle {
+    font-size: 3.5rem;
+    margin-left: -5px;
+  }
+  .weather-description {
+    font-size: 14px;
+  }
+  .spaced-content {
+    padding: 8px 0;
+  }
+  .table-value {
+    font-size: 14px;
+  }
+  #condition {
+    font-size: 16px;
+  }
+  .celsius {
+    font-size: 16px;
+    margin-left: -15px;
+  }
+  .weather-temp .temperature {
+    font-size: 3.2rem;
+  }
+  .temp-circle {
+    font-size: 3.2rem;
+  }
+  .weather-temp .real-feel {
+    font-size: 15px;
+  }
+  .weather-icon {
+    width: 80px;
+    height: 80px;
+  }
+  .additional-info {
+    width: 70%;
   }
 }
