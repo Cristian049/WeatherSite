@@ -108,6 +108,10 @@ input[type="search"]::-webkit-search-results-decoration {
   border-radius: var(--border-radius) !important;
 }
 
+.container {
+  max-width: 960px;
+}
+
 .gradient {
   margin-top: 56px;
   will-change: background-position;
@@ -281,6 +285,10 @@ input[type="search"]::-webkit-search-results-decoration {
 /* MAIN */
 
 /* FOOTER */
+.footer {
+  max-width: 960px;
+}
+
 footer a:hover {
   text-decoration: underline;
 }

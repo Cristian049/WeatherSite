@@ -137,7 +137,7 @@ form.addEventListener("submit", async function (e) {
       const res = await axios.get(`${baseUrl}?city=${inputVal}&key=${apiKey}`);
       const weatherData = new WeatherDataDaily(res.data);
       const weatherCard = new WeatherCardDaily(weatherData);
-
+      weatherContainer.innerHTML = "";
       weatherContainer.append(weatherCard.render());
     } catch (error) {
       console.error("Error fetching weather data:", error);
