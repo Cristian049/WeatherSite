@@ -218,7 +218,7 @@ class WeatherCardDaily {
 
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
-  const apiKey = "0b5eac87736d4cab95709976b8c2e278";
+  const apiKey = "e487166d77eb4391b512f1abc6c65093";
   const baseUrl = "https://api.weatherbit.io/v2.0/current";
   const inputVal = inputSearch.value;
   if (inputVal) {
@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   for (let city of selectedCities) {
     try {
       const res = await axios.get(
-        `https://api.weatherbit.io/v2.0/current?city=${city.city}&country=${city.country}&key=0b5eac87736d4cab95709976b8c2e278`
+        `https://api.weatherbit.io/v2.0/current?city=${city.city}&country=${city.country}&key=e487166d77eb4391b512f1abc6c65093`
       );
       const weatherDataOnload = new WeatherDataDaily(res.data);
       const weatherCardOnload = new WeatherCardDaily(weatherDataOnload);
@@ -328,12 +328,20 @@ layerSelect.addEventListener("change", (event) => {
     activeLayer.addTo(map);
   }
 });
+
 const mapExpand = document.querySelector(".map-container");
-const expandBtn = document.querySelector(".expand-btn");
-expandBtn.addEventListener("click", function (e) {
+const expandBtn = document.querySelector("#expand-btn");
+
+expandBtn.addEventListener("click", function () {
   if (mapExpand.classList.contains("full-map")) {
     mapExpand.classList.remove("full-map");
+    expandBtn.classList.remove("full-map-btn");
+    expandBtn.classList.add("expand-btn");
+    map.invalidateSize();
   } else {
     mapExpand.classList.add("full-map");
+    expandBtn.classList.remove("expand-btn");
+    expandBtn.classList.add("full-map-btn");
+    map.invalidateSize();
   }
 });

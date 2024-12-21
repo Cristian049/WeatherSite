@@ -112,19 +112,18 @@
           <div class="col-sm-8">
             <div class="weather"></div>
             <div class="map-container">
-              <div id="map">
-                <select id="layerSelect">
-                  <option value="none">Select Layer</option>
-                  <option value="precipitation">Precipitation</option>
-                  <option value="clouds">Clouds</option>
-                  <option value="temperature">Temperature</option>
-                  <option value="pressure">Pressure</option>
-                  <option value="wind">Wind</option>
-                </select>
-                <button class="expand-btn">
-                  <i class="bi bi-arrows-fullscreen btn-expand-svg"></i>
-                </button>
-              </div>
+              <div id="map"></div>
+              <select id="layerSelect">
+                <option value="none">Select Layer</option>
+                <option value="precipitation">Precipitation</option>
+                <option value="clouds">Clouds</option>
+                <option value="temperature">Temperature</option>
+                <option value="pressure">Pressure</option>
+                <option value="wind">Wind</option>
+              </select>
+              <button class="expand-btn" id="expand-btn">
+                <i class="bi bi-arrows-fullscreen btn-expand-svg"></i>
+              </button>
             </div>
           </div>
           <div class="col-sm-4">
