@@ -134,6 +134,16 @@ const featuredCities = [
   { city: "Amman", country: "JO" },
 ];
 
+function resetMapView() {
+  if (mapExpand.classList.contains("full-map")) {
+    mapExpand.classList.remove("full-map");
+    expandBtn.classList.remove("full-map-btn");
+    expandBtn.classList.add("expand-btn");
+    body.classList.remove("hide-scroll");
+    map.invalidateSize();
+  }
+}
+
 function formatTime() {
   const now = new Date();
   let hours = now.getHours();
@@ -218,6 +228,7 @@ class WeatherCardDaily {
 
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
+  resetMapView();
   const apiKey = "e487166d77eb4391b512f1abc6c65093";
   const baseUrl = "https://api.weatherbit.io/v2.0/current";
   const inputVal = inputSearch.value;
@@ -249,9 +260,9 @@ function getRandomCities(numberOfCities) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const selectedCities = getRandomCities(1);
+  const selectedCities = getRandomCities(2);
   weatherContainer.innerHTML = "";
-
+  map.invalidateSize();
   for (let city of selectedCities) {
     try {
       const res = await axios.get(
@@ -268,7 +279,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 const map = L.map("map").setView([45.9432, 24.9668], 6);
-
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 13,
   attribution:
@@ -331,17 +341,19 @@ layerSelect.addEventListener("change", (event) => {
 
 const mapExpand = document.querySelector(".map-container");
 const expandBtn = document.querySelector("#expand-btn");
-
+const body = document.querySelector("body");
 expandBtn.addEventListener("click", function () {
   if (mapExpand.classList.contains("full-map")) {
     mapExpand.classList.remove("full-map");
     expandBtn.classList.remove("full-map-btn");
     expandBtn.classList.add("expand-btn");
+    body.classList.remove("hide-scroll");
     map.invalidateSize();
   } else {
     mapExpand.classList.add("full-map");
     expandBtn.classList.remove("expand-btn");
     expandBtn.classList.add("full-map-btn");
+    body.classList.add("hide-scroll");
     map.invalidateSize();
   }
 });
