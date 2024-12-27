@@ -134,16 +134,6 @@ const featuredCities = [
   { city: "Amman", country: "JO" },
 ];
 
-function resetMapView() {
-  if (mapExpand.classList.contains("full-map")) {
-    mapExpand.classList.remove("full-map");
-    expandBtn.classList.remove("full-map-btn");
-    expandBtn.classList.add("expand-btn");
-    body.classList.remove("hide-scroll");
-    map.invalidateSize();
-  }
-}
-
 function formatTime() {
   const now = new Date();
   let hours = now.getHours();
@@ -260,25 +250,46 @@ function getRandomCities(numberOfCities) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const selectedCities = getRandomCities(2);
-  weatherContainer.innerHTML = "";
-  map.invalidateSize();
-  for (let city of selectedCities) {
+  const selectedCities = getRandomCities(4); // Adjust the number of cities as needed
+  const weatherContainer1 = document.getElementById("weatherContainer1");
+  const weatherContainer2 = document.getElementById("weatherContainer2");
+
+  if (!weatherContainer1 || !weatherContainer2) {
+    console.error("Weather containers not found in the DOM.");
+    return;
+  }
+
+  weatherContainer1.innerHTML = "";
+  weatherContainer2.innerHTML = "";
+
+  const midpoint = Math.ceil(selectedCities.length / 2);
+
+  for (let i = 0; i < selectedCities.length; i++) {
+    const city = selectedCities[i];
     try {
       const res = await axios.get(
         `https://api.weatherbit.io/v2.0/current?city=${city.city}&country=${city.country}&key=e487166d77eb4391b512f1abc6c65093`
       );
       const weatherDataOnload = new WeatherDataDaily(res.data);
       const weatherCardOnload = new WeatherCardDaily(weatherDataOnload);
-      weatherContainer.append(weatherCardOnload.renderCurrent());
+      if (i < midpoint) {
+        weatherContainer1.append(weatherCardOnload.renderCurrent());
+      } else {
+        weatherContainer2.append(weatherCardOnload.renderCurrent());
+      }
     } catch (error) {
       console.error(`Error fetching weather data for ${city.city}:`, error);
-      weatherContainer.innerHTML += `<p>Error fetching weather data for ${city.city}.</p>`;
+      if (i < midpoint) {
+        weatherContainer1.innerHTML += `<p>Error fetching weather data for ${city.city}.</p>`;
+      } else {
+        weatherContainer2.innerHTML += `<p>Error fetching weather data for ${city.city}.</p>`;
+      }
     }
   }
 });
 
 const map = L.map("map").setView([45.9432, 24.9668], 6);
+
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 13,
   attribution:
@@ -342,6 +353,7 @@ layerSelect.addEventListener("change", (event) => {
 const mapExpand = document.querySelector(".map-container");
 const expandBtn = document.querySelector("#expand-btn");
 const body = document.querySelector("body");
+
 expandBtn.addEventListener("click", function () {
   if (mapExpand.classList.contains("full-map")) {
     mapExpand.classList.remove("full-map");
@@ -357,3 +369,12 @@ expandBtn.addEventListener("click", function () {
     map.invalidateSize();
   }
 });
+
+function resetMapView() {
+  mapExpand.classList.remove("full-map");
+  expandBtn.classList.remove("full-map-btn");
+  expandBtn.classList.add("expand-btn");
+  body.classList.remove("hide-scroll");
+  map.invalidateSize();
+  scrollTo(0, 0);
+}

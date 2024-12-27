@@ -13,7 +13,6 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 p {
@@ -127,9 +126,9 @@ input[type="search"]::-webkit-search-results-decoration {
   position: fixed;
   top: 56px;
   left: 0;
-  bottom: 0px;
+  bottom: -56px;
   width: 100%;
-  height: calc(100% - 56px);
+  height: 100%;
   z-index: 1000;
   background: white;
 }
@@ -157,7 +156,7 @@ input[type="search"]::-webkit-search-results-decoration {
   position: absolute;
   z-index: 1000;
   right: 15px;
-  bottom: 30px;
+  bottom: 71px;
   border: 1px solid #919191;
   background-color: white;
   border-radius: 50%;
@@ -197,24 +196,7 @@ input[type="search"]::-webkit-search-results-decoration {
   min-height: 150vh;
   background: linear-gradient(
     45deg,
-    rgba(230, 237, 170),
-    rgba(227, 228, 170),
-    rgba(243, 244, 170),
-    rgba(241, 247, 170),
-    rgba(215, 234, 170),
-    rgba(228, 238, 170),
-    rgba(220, 222, 170),
-    rgba(236, 241, 170),
-    rgba(243, 247, 170),
-    rgba(234, 239, 170),
-    rgba(231, 232, 170),
-    rgba(215, 221, 170)
-  );
-  background-size: 200%;
-  animation: bgAnimatedGradient 15s infinite linear;
-}
-
-/* rgba(230, 237, 253, 0.5),
+    rgba(230, 237, 253, 0.5),
     rgba(227, 228, 253, 0.5),
     rgba(243, 244, 255, 0.5),
     rgba(241, 247, 255, 0.5),
@@ -225,7 +207,11 @@ input[type="search"]::-webkit-search-results-decoration {
     rgba(243, 247, 255, 0.5),
     rgba(234, 239, 255, 0.5),
     rgba(231, 232, 255, 0.5),
-    rgba(215, 221, 255, 0.5) */
+    rgba(215, 221, 255, 0.5)
+  );
+  background-size: 200%;
+  animation: bgAnimatedGradient 15s infinite linear;
+}
 
 @keyframes bgAnimatedGradient {
   0% {
