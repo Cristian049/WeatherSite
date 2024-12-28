@@ -104,6 +104,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .map-container {
+  flex: 1 1 100%;
   position: relative;
   height: 55vh;
   width: 100%;
@@ -260,6 +261,7 @@ input[type="search"]::-webkit-search-results-decoration {
   border-radius: 10px;
   box-shadow: var(--box-shadow);
   margin-bottom: 1em;
+  flex: 1 1 45%;
 }
 
 .weather-header {
@@ -363,6 +365,7 @@ input[type="search"]::-webkit-search-results-decoration {
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   padding: 8px 16px;
+  flex: 1 1 100%;
 }
 
 /* MAIN */

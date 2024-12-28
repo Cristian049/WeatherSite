@@ -134,6 +134,23 @@ const featuredCities = [
   { city: "Amman", country: "JO" },
 ];
 
+const roCities = [
+  { name: "Craiova" },
+  { name: "Bucharest" },
+  { name: "Cluj-Napoca" },
+  { name: "Timisoara" },
+  { name: "Iasi" },
+  { name: "Constanta" },
+  { name: "Brasov" },
+  { name: "Galati" },
+  { name: "Ploiesti" },
+  { name: "Oradea" },
+  { name: "Braila" },
+  { name: "Arad" },
+  { name: "Pitesti" },
+  { name: "Sibiu" },
+];
+
 function formatTime() {
   const now = new Date();
   let hours = now.getHours();
@@ -227,9 +244,9 @@ form.addEventListener("submit", async function (e) {
       const res = await axios.get(`${baseUrl}?city=${inputVal}&key=${apiKey}`);
       const weatherData = new WeatherDataDaily(res.data);
       const weatherCard = new WeatherCardDaily(weatherData);
-      weatherContainer.innerHTML = "";
-      weatherContainer.innerHTML = "";
-      weatherContainer.append(weatherCard.renderCurrent());
+      weatherContainer1.innerHTML = "";
+      weatherContainer1.append(weatherCard.renderCurrent());
+      weatherContainer2.innerHTML = "";
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
@@ -250,10 +267,9 @@ function getRandomCities(numberOfCities) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const selectedCities = getRandomCities(4); // Adjust the number of cities as needed
+  const selectedCities = getRandomCities(4);
   const weatherContainer1 = document.getElementById("weatherContainer1");
   const weatherContainer2 = document.getElementById("weatherContainer2");
-
   if (!weatherContainer1 || !weatherContainer2) {
     console.error("Weather containers not found in the DOM.");
     return;
