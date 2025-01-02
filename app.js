@@ -135,10 +135,10 @@ const featuredCities = [
 ];
 
 const roCities = [
-  { name: "Craiova" },
   { name: "Bucharest" },
   { name: "Cluj-Napoca" },
   { name: "Timisoara" },
+  { name: "Craiova" },
   { name: "Iasi" },
   { name: "Constanta" },
   { name: "Brasov" },
@@ -149,7 +149,49 @@ const roCities = [
   { name: "Arad" },
   { name: "Pitesti" },
   { name: "Sibiu" },
+  { name: "Bacau" },
+  { name: "Targu Mures" },
+  { name: "Buzau" },
+  { name: "Botosani" },
+  { name: "Satu Mare" },
+  { name: "Suceava" },
 ];
+
+class WeatherCities {
+  constructor(weatherData) {
+    this.weatherData = weatherData;
+  }
+  renderCities() {
+    const citiesContainer = document.querySelector("#cities-cont");
+    const cityCard = document.createElement("div");
+    cityCard.className = "rocity-card";
+    cityCard.innerHTML = `
+    <span class="rocity-name">${this.weatherData.city}</span>
+    <span ><img class="rocity-icon" src="${this.weatherData.getWeatherIcon()}"></span>
+    <span class="rocity-temp">${this.weatherData.temperature}°C</span>`;
+
+    return cityCard;
+  }
+}
+
+async function runRoCities() {
+  for (let cities of roCities) {
+    const city = cities.name;
+    const weatherContainerCities = document.querySelector("#cities-cont");
+    try {
+      const res = await axios.get(
+        `https://api.weatherbit.io/v2.0/current?city=${city}&country=RO&key=e487166d77eb4391b512f1abc6c65093`
+      );
+      const weatherDataCities = new WeatherDataDaily(res.data);
+      const weatherCardCities = new WeatherCities(weatherDataCities);
+      weatherContainerCities.append(weatherCardCities.renderCities());
+    } catch (error) {
+      console.error(`Error fetching weather data for ${city}:`, error);
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", runRoCities);
 
 function formatTime() {
   const now = new Date();
