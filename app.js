@@ -168,11 +168,59 @@ class WeatherCities {
     cityCard.innerHTML = `
     <span class="rocity-name">${this.weatherData.city}</span>
     <span ><img class="rocity-icon" src="${this.weatherData.getWeatherIcon()}"></span>
-    <span class="rocity-temp">${this.weatherData.temperature}°C</span>`;
+    <span class="rocity-temp">${Math.floor(
+      this.weatherData.temperature
+    )}°C</span>`;
 
     return cityCard;
   }
 }
+
+const selectUnits = document.querySelector("#unitSelect");
+selectUnits.addEventListener("change", function (e) {
+  const unitParam = units === "I" ? "I" : "M";
+  runRoCities(unitParam);
+  const units = e.target.value;
+  const temperatures = document.querySelectorAll(".temperature");
+  const realFeels = document.querySelectorAll(".real-feel");
+  const celsius = document.querySelectorAll(".celsius");
+  const tempCircles = document.querySelectorAll(".temp-circle");
+  const weatherCardsCities = document.querySelectorAll(".rocity-card");
+  const unitSymbol = units === "I" ? "F" : "C";
+
+  celsius.forEach((cel) => {
+    cel.textContent = `°${unitSymbol}`;
+  });
+  tempCircles.forEach((circle) => {
+    circle.textContent = `°${unitSymbol}`;
+  });
+  weatherCardsCities.forEach((card) => {
+    const tempElement = card.querySelector(".rocity-temp");
+    const currentTemp = parseFloat(tempElement.textContent);
+    tempElement.textContent =
+      units === "I"
+        ? Math.floor((currentTemp * 9) / 5 + 32)
+        : Math.floor(((currentTemp - 32) * 5) / 9);
+    tempElement.textContent += `°${unitSymbol}`;
+  });
+
+  temperatures.forEach((temp) => {
+    const currentTemp = parseFloat(temp.textContent);
+    temp.textContent =
+      units === "I"
+        ? Math.floor((currentTemp * 9) / 5 + 32)
+        : Math.floor(((currentTemp - 32) * 5) / 9);
+  });
+
+  realFeels.forEach((feel) => {
+    const currentFeel = parseFloat(feel.textContent.replace("Real feel:", ""));
+    feel.textContent = `Real feel: ${
+      units === "I"
+        ? Math.floor((currentTemp * 9) / 5 + 32)
+        : Math.floor(((currentTemp - 32) * 5) / 9)
+    }°`;
+  });
+});
 
 async function runRoCities() {
   for (let cities of roCities) {
@@ -180,7 +228,7 @@ async function runRoCities() {
     const weatherContainerCities = document.querySelector("#cities-cont");
     try {
       const res = await axios.get(
-        `https://api.weatherbit.io/v2.0/current?city=${city}&country=RO&key=e487166d77eb4391b512f1abc6c65093`
+        `https://api.weatherbit.io/v2.0/current?city=${city}&country=RO&key=05857751833645b2bbeb8c3f5d79234f	&units=M`
       );
       const weatherDataCities = new WeatherDataDaily(res.data);
       const weatherCardCities = new WeatherCities(weatherDataCities);
@@ -191,7 +239,7 @@ async function runRoCities() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", runRoCities);
+// document.addEventListener("DOMContentLoaded", runRoCities);
 
 function formatTime() {
   const now = new Date();
@@ -278,7 +326,7 @@ class WeatherCardDaily {
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
   resetMapView();
-  const apiKey = "e487166d77eb4391b512f1abc6c65093";
+  const apiKey = "05857751833645b2bbeb8c3f5d79234f	";
   const baseUrl = "https://api.weatherbit.io/v2.0/current";
   const inputVal = inputSearch.value;
   if (inputVal) {
@@ -309,7 +357,7 @@ function getRandomCities(numberOfCities) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const selectedCities = getRandomCities(4);
+  const selectedCities = getRandomCities(1);
   const weatherContainer1 = document.getElementById("weatherContainer1");
   const weatherContainer2 = document.getElementById("weatherContainer2");
   if (!weatherContainer1 || !weatherContainer2) {
@@ -326,7 +374,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const city = selectedCities[i];
     try {
       const res = await axios.get(
-        `https://api.weatherbit.io/v2.0/current?city=${city.city}&country=${city.country}&key=e487166d77eb4391b512f1abc6c65093`
+        `https://api.weatherbit.io/v2.0/current?city=${city.city}&country=${city.country}&key=05857751833645b2bbeb8c3f5d79234f`
       );
       const weatherDataOnload = new WeatherDataDaily(res.data);
       const weatherCardOnload = new WeatherCardDaily(weatherDataOnload);
