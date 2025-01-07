@@ -178,8 +178,6 @@ class WeatherCities {
 
 const selectUnits = document.querySelector("#unitSelect");
 selectUnits.addEventListener("change", function (e) {
-  const unitParam = units === "I" ? "I" : "M";
-  runRoCities(unitParam);
   const units = e.target.value;
   const temperatures = document.querySelectorAll(".temperature");
   const realFeels = document.querySelectorAll(".real-feel");
@@ -187,13 +185,19 @@ selectUnits.addEventListener("change", function (e) {
   const tempCircles = document.querySelectorAll(".temp-circle");
   const weatherCardsCities = document.querySelectorAll(".rocity-card");
   const unitSymbol = units === "I" ? "F" : "C";
-
+  const windSpeeds = document.querySelectorAll(".wind-speed");
+  windSpeeds.forEach((wind) => {
+    const currentWindSpeed = parseFloat(wind.textContent);
+    wind.textContent =
+      units === "I"
+        ? (currentWindSpeed * 0.621371).toFixed(1)
+        : (currentWindSpeed / 0.621371).toFixed(1);
+    wind.textContent += units === "I" ? " mph" : " km/h";
+  });
   celsius.forEach((cel) => {
-    cel.textContent = `°${unitSymbol}`;
+    cel.textContent = unitSymbol;
   });
-  tempCircles.forEach((circle) => {
-    circle.textContent = `°${unitSymbol}`;
-  });
+
   weatherCardsCities.forEach((card) => {
     const tempElement = card.querySelector(".rocity-temp");
     const currentTemp = parseFloat(tempElement.textContent);
@@ -206,18 +210,23 @@ selectUnits.addEventListener("change", function (e) {
 
   temperatures.forEach((temp) => {
     const currentTemp = parseFloat(temp.textContent);
-    temp.textContent =
+    const newTempCircle = document.createElement("span");
+    newTempCircle.className = "temp-circle";
+    newTempCircle.textContent = "°";
+    temp.textContent = `${
       units === "I"
         ? Math.floor((currentTemp * 9) / 5 + 32)
-        : Math.floor(((currentTemp - 32) * 5) / 9);
+        : Math.floor(((currentTemp - 32) * 5) / 9)
+    }`;
+    temp.appendChild(newTempCircle);
   });
 
   realFeels.forEach((feel) => {
     const currentFeel = parseFloat(feel.textContent.replace("Real feel:", ""));
     feel.textContent = `Real feel: ${
       units === "I"
-        ? Math.floor((currentTemp * 9) / 5 + 32)
-        : Math.floor(((currentTemp - 32) * 5) / 9)
+        ? Math.floor((currentFeel * 9) / 5 + 32)
+        : Math.floor(((currentFeel - 32) * 5) / 9)
     }°`;
   });
 });
@@ -266,6 +275,8 @@ class WeatherDataDaily {
     this.windSpeed = dataRes.wind_spd;
     this.realTemp = Math.floor(dataRes.app_temp);
     this.pressure = dataRes.pres;
+    this.uvindex = dataRes.uv;
+    this.airQuality = dataRes.aqi;
   }
   getWeatherIcon() {
     return animatedWeatherIcons[this.icon] || "images/all/default-icon.svg";
@@ -278,8 +289,34 @@ class WeatherCardDaily {
   }
   renderCurrent() {
     const countryCode = this.weatherData.country;
+    const airQuality = this.weatherData.airQuality;
+    let airQualityDescription = "";
+    let airQualityColor = "";
+    if (airQuality < 25) {
+      airQualityDescription = "Excelent";
+      airQualityColor = "#0051ff";
+    } else if (airQuality >= 25 && airQuality <= 50) {
+      airQualityDescription = "Good";
+      airQualityColor = "green";
+    } else if (airQuality > 50 && airQuality <= 100) {
+      airQualityDescription = "Moderate";
+      airQualityColor = "#e7e70e";
+    } else if (airQuality > 100 && airQuality <= 150) {
+      airQualityDescription = "Poor";
+      airQualityColor = "orange";
+    } else if (airQuality > 150 && airQuality <= 200) {
+      airQualityDescription = "Unhealthy";
+      airQualityColor = "red";
+    } else if (airQuality > 200 && airQuality <= 300) {
+      airQualityDescription = "Severe";
+      airQualityColor = "purple";
+    } else if (airQuality > 300) {
+      airQualityDescription = "Hazardous";
+      airQualityColor = "maroon";
+    }
     const currentTime = formatTime();
     const card = document.createElement("div");
+
     card.className = `weather-card`;
 
     card.innerHTML = `
@@ -290,9 +327,10 @@ class WeatherCardDaily {
       <div class="weather-value">
         <div id="weather-info">
           <div class="weather-temps">
+          <div class="weather-icon-container">
             <img class="weather-icon" src="${this.weatherData.getWeatherIcon()}" alt="${
       this.weatherData.condition
-    }">
+    }"></div>
           <div class="weather-temp">
             <span class="temperature">${
               this.weatherData.temperature
@@ -309,12 +347,16 @@ class WeatherCardDaily {
            <p class="spaced-content"><span class="weather-description">Humidity</span> <span class="table-value">${
              this.weatherData.humidity
            }%</span></p>
-           <p class="spaced-content"><span class="weather-description">Wind</span> <span class="table-value">${
+           <p class="spaced-content"><span class="weather-description">Wind</span> <span class="table-value wind-speed">${
              this.weatherData.windSpeed
            } km/h</span></p>
            <p class="spaced-content"><span class="weather-description">Pressure</span><span class="table-value">${
              this.weatherData.pressure
            } hPa</span></p>
+           <p class="spaced-content"><span class="weather-description">UV Index</span><span class="table-value">${
+             this.weatherData.uvindex
+           } of 11</span></p>
+           <p class="spaced-content"><span class="weather-description">Air quality</span><span class="table-value" style="color: ${airQualityColor}; font-weight: 900;">${airQualityDescription} </span></p>
         </div>
       <div>
     `;
@@ -357,7 +399,7 @@ function getRandomCities(numberOfCities) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const selectedCities = getRandomCities(1);
+  const selectedCities = getRandomCities(2);
   const weatherContainer1 = document.getElementById("weatherContainer1");
   const weatherContainer2 = document.getElementById("weatherContainer2");
   if (!weatherContainer1 || !weatherContainer2) {
@@ -394,7 +436,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-const map = L.map("map").setView([45.9432, 24.9668], 6);
+const map = L.map("map", { attributionControl: false }).setView(
+  [45.9432, 24.9668],
+  6
+);
 
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 13,
@@ -403,13 +448,13 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 const cities = [
-  { name: "Bucharest", coords: [44.4268, 26.1025] },
-  { name: "Cluj-Napoca", coords: [46.7712, 23.6236] },
-  { name: "Timișoara", coords: [45.7489, 21.2087] },
-  { name: "Iași", coords: [47.1585, 27.6014] },
-  { name: "Constanța", coords: [44.1598, 28.6348] },
-  { name: "Brașov", coords: [45.6573, 25.6103] },
-  { name: "Craiova", coords: [44.3318, 23.7946] },
+  { name: "Bucharest", coords: [44.439663, 26.096306] },
+  { name: "Cluj-Napoca", coords: [46.770439, 23.591423] },
+  { name: "Timișoara", coords: [45.760696, 21.226788] },
+  { name: "Iași", coords: [47.151726, 27.587914] },
+  { name: "Constanța", coords: [44.179249, 28.64994] },
+  { name: "Brașov", coords: [45.657974, 25.601198] },
+  { name: "Craiova", coords: [44.319305, 23.800678] },
 ];
 
 cities.forEach((city) => {
@@ -454,6 +499,11 @@ layerSelect.addEventListener("change", (event) => {
     activeLayer = layers[selectedLayer];
     activeLayer.addTo(map);
   }
+  if (selectedLayer === "temperature") {
+    temperatureLegend.addTo(map);
+  } else {
+    map.removeControl(temperatureLegend);
+  }
 });
 
 const mapExpand = document.querySelector(".map-container");
@@ -484,3 +534,32 @@ function resetMapView() {
   map.invalidateSize();
   scrollTo(0, 0);
 }
+
+const temperatureLegend = L.control({ position: "bottomright" });
+
+temperatureLegend.onAdd = function () {
+  const div = L.DomUtil.create("div", "legend");
+  div.innerHTML += '<span class="legend-item">-30°C</span>';
+  div.innerHTML += '<div class="gradient-bar"></div>';
+  div.innerHTML += `<span class="legend-item">50°C</span>`;
+  return div;
+};
+
+mapExpand.addEventListener("transitionend", function () {
+  const legendItems = document.querySelector(".legend");
+  if (mapExpand.classList.contains("full-map")) {
+    legendItems.style.transform = "translateY(-290%)";
+  } else {
+    legendItems.style.transform = "translateY(0)";
+  }
+});
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" || e.keyCode === 27) {
+    mapExpand.classList.remove("full-map");
+    expandBtn.classList.remove("full-map-btn");
+    expandBtn.classList.add("expand-btn");
+    body.classList.remove("hide-scroll");
+    map.invalidateSize();
+  }
+});

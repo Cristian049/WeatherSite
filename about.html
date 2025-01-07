@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Weather AC provides weather updates all over the world."
+    />
+    <meta
+      name="keywords"
+      content="weather, AC, climate, weather updates, temperature"
+    />
+    <meta name="author" content="Weather AC" />
+    <title>About</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="images/sunfavpng_1733236657-trimmy-Lovepik_com-401706139-sun.png"
+    />
+    <link rel="stylesheet" href="about.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=search"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" id="navbar">
+      <div class="container d-flex gx-0" id="navcon">
+        <a class="navbar-brand" href="index.html">
+          <img
+            src="images/sunfavpng_1733236657-trimmy-Lovepik_com-401706139-sun.png"
+            alt="Weather AC Logo"
+          /><span class="nav-name">Weather AC</span>
+        </a>
+        <button
+          class="navbar-toggler ms-auto"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation menu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact.html" target="_blank"
+                >Contact</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="gradient">
+      <div class="cont" id="main">
+        <div class="contAbout">
+          <h1 class="about-header">About Weather AC</h1>
+
+          <p class="about-paragraph">
+            <strong
+              >Welcome to
+              <span class="about-highlight">Weather AC</span>!</strong
+            >
+            We are more than just your average weather website. We are your
+            go-to partner for understanding the world around you, providing
+            reliable, real-time weather forecasts and insights tailored to your
+            needs. Whether you're preparing for a day at the beach, a road trip,
+            or just checking to see how you should dress for the day,
+            <span class="about-highlight">Weather AC</span> is here to make sure
+            you're always one step ahead of the weather.
+          </p>
+
+          <h2 class="about-subheader">
+            Our Mission: Empowering You with Accurate Weather Information
+          </h2>
+          <div class="about-mission">
+            <p class="about-paragraph">
+              At <span class="about-highlight">Weather AC</span>, our mission is
+              simple: to provide you with the most accurate, timely, and
+              user-friendly weather information possible. We believe that
+              understanding the weather isn’t just about knowing if it will rain
+              tomorrow—it’s about having the insights you need to make informed
+              decisions about your life, your safety, and your plans. Whether
+              it's a surprise storm or a sunny weekend, we’re here to help you
+              plan with confidence.
+            </p>
+            <p class="about-paragraph">
+              <span class="about-highlight">Weather AC</span> is built on a
+              foundation of trust, precision, and clarity. We gather weather
+              data from some of the most trusted meteorological sources
+              worldwide, ensuring that every forecast, alert, and report we
+              provide is based on the latest scientific data and analysis. Our
+              goal is to not only give you the numbers, but also provide
+              explanations and visualizations that make the forecast easy to
+              understand and act on.
+            </p>
+          </div>
+
+          <h2 class="about-subheader">
+            The Core Features of
+            <span class="about-highlight">Weather AC</span>
+          </h2>
+          <p class="about-paragraph">
+            We are proud to offer a variety of features designed to make weather
+            information more accessible, useful, and actionable. Some of the key
+            features include:
+          </p>
+
+          <ul class="about-list">
+            <li>
+              <strong class="about-strong">Real-Time Weather Updates:</strong>
+              Get live updates on current weather conditions, including
+              temperature, humidity, wind speed, UV index, and air quality, all
+              from the comfort of your device.
+            </li>
+            <li>
+              <strong class="about-strong"
+                >Detailed Hourly and Daily Forecasts:</strong
+              >
+              Plan ahead with our precise hourly forecasts for the next 24
+              hours, as well as detailed 16-day forecasts. Whether you're
+              heading out for a few hours or planning a vacation, we've got you
+              covered.
+            </li>
+            <li>
+              <strong class="about-strong">Interactive Weather Maps:</strong>
+              View real-time radar maps that show precipitation patterns, storm
+              tracking, and more. Our interactive maps make it easy to visualize
+              weather changes and prepare accordingly.
+            </li>
+            <li>
+              <strong class="about-strong">Severe Weather Alerts:</strong>
+              Safety is our priority. Receive instant notifications about severe
+              weather events such as thunderstorms, tornadoes, hurricanes, or
+              blizzards. We provide early warnings to help you stay safe.
+            </li>
+            <li>
+              <strong class="about-strong">Global Coverage:</strong> No matter
+              where you are in the world, we provide weather updates for
+              locations across the globe. From bustling cities to remote
+              villages, <span class="about-highlight">Weather AC</span> ensures
+              you're always informed.
+            </li>
+            <li>
+              <strong class="about-strong">Customizable Experience:</strong>
+              Tailor the website to your preferences with location-based
+              forecasts, language settings, and themes that match your style. We
+              also provide widgets and APIs for developers looking to integrate
+              our weather data into their apps or websites.
+            </li>
+            <li>
+              <strong class="about-strong">Weather News & Insights:</strong>
+              Stay up to date with the latest weather-related news, including
+              trends, forecasts, climate updates, and global weather phenomena.
+              We dive deep into weather science, offering informative articles
+              and reports.
+            </li>
+          </ul>
+          <h2 class="about-subheader">
+            Why Choose <span class="about-highlight">Weather AC</span>?
+          </h2>
+          <p class="about-paragraph">
+            <span class="about-highlight">Weather AC</span> is built by weather
+            enthusiasts for everyone. Whether you’re an outdoor adventurer, a
+            commuter, or simply a curious traveler, we are here to help you
+            understand the environment you live in. We strive to be your trusted
+            weather partner, delivering accurate, easy-to-read, and actionable
+            information for people of all ages and interests.
+          </p>
+
+          <h2 class="about-subheader">
+            Our Commitment to Accuracy & Transparency
+          </h2>
+          <p class="about-paragraph">
+            At <span class="about-highlight">Weather AC</span>, we take the
+            accuracy of our weather forecasts seriously. We utilize a
+            combination of global weather data providers, including government
+            meteorological agencies and leading private weather services, to
+            ensure we provide the most reliable information possible. Our team
+            of meteorologists and weather experts carefully analyze and verify
+            each forecast to ensure it meets the highest standards.
+          </p>
+          <p class="about-paragraph">
+            We also believe in transparency. We provide users with access to our
+            sources and methodology so that you can trust the information you're
+            receiving. Our goal is to help you make informed decisions, not just
+            throw numbers at you. Transparency is key to building trust with our
+            community.
+          </p>
+
+          <h2 class="about-subheader">
+            Join the
+            <span class="about-highlight">Weather AC</span> Community
+          </h2>
+          <p class="about-paragraph">
+            Weather impacts all of us, whether we realize it or not. At
+            <span class="about-highlight">Weather AC</span>, we want to help you
+            make the most of each day by understanding the weather around you.
+            We believe in fostering a community where people can share their
+            experiences, learn about weather trends, and support each other
+            during severe weather events.
+          </p>
+          <p class="about-paragraph">
+            We invite you to become a part of our growing community. Share your
+            weather stories, tips for staying safe, or helpful advice with
+            others. Join us on social media and be part of the conversation!
+            Stay informed, stay connected, and stay prepared with
+            <span class="about-highlight">Weather AC</span>.
+          </p>
+
+          <p class="about-quote">
+            “In every journey, weather plays a key role—let us help you
+            understand it, plan for it, and enjoy the adventure!”
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-cont footer">
+      <footer class="py-3 my-4">
+        <ul class="nav justify-content-center pb-3 mb-3">
+          <li class="nav-item">
+            <a
+              href="term.html"
+              class="nav-link px-2 text-body-secondary"
+              target="_blank"
+              >Terms of Use</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              href="privacy.html"
+              class="nav-link px-2 text-body-secondary"
+              target="_blank"
+              >Privacy Policy</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              href="cookie.html"
+              class="nav-link px-2 text-body-secondary"
+              target="_blank"
+              >Cookie Policy</a
+            >
+          </li>
+        </ul>
+        <p class="text-center text-body-secondary">
+          &copy; 2024 Weather AC, Inc 'Weather AC'. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="app.js"></script>
+  </body>
+</html>

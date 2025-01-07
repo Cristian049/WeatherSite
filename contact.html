@@ -12,13 +12,13 @@
       content="weather, AC, climate, weather updates, temperature"
     />
     <meta name="author" content="Weather AC" />
-    <title>Weather AC</title>
+    <title>Contact</title>
     <link
       rel="icon"
       type="image/png"
       href="images/sunfavpng_1733236657-trimmy-Lovepik_com-401706139-sun.png"
     />
-    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="contact.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -37,11 +37,6 @@
     />
 
     <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    />
-
-    <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
@@ -54,7 +49,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" id="navbar">
-      <div class="container d-flex justify-content-center gx-0" id="navcon">
+      <div class="container d-flex gx-0" id="navcon">
         <a class="navbar-brand" href="index.html">
           <img
             src="images/sunfavpng_1733236657-trimmy-Lovepik_com-401706139-sun.png"
@@ -76,92 +71,72 @@
           <ul class="navbar-nav me-auto mb-lg-0">
             <li class="nav-item">
               <a
-                class="nav-link active"
+                class="nav-link"
                 aria-current="page"
-                href="/about.html"
+                href="about.html"
                 target="_blank"
                 >About</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/contact.html" target="_blank"
-                >Contact</a
-              >
+              <a class="nav-link" href="#">Contact</a>
             </li>
           </ul>
-          <div class="unit-selector">
-            <div class="select">
-              <select id="unitSelect">
-                <option value="M">°C</option>
-                <option value="I">°F</option>
-              </select>
-            </div>
-          </div>
-
-          <form class="form-search" role="search">
-            <div class="search">
-              <span class="material-symbols-outlined icon-search">
-                search
-              </span>
-              <input
-                class="me-2 input-search"
-                type="search"
-                placeholder="Search "
-                aria-label="Search"
-                name="city"
-              />
-            </div>
-          </form>
         </div>
       </div>
     </nav>
 
     <div class="gradient">
-      <div class="container d-flex justify-content-center gx-0" id="btnList">
-        <div class="btnList">
-          <button class="currentForcast custom-btn">Current</button>
-          <button class="hourlyForecast custom-btn">Hourly</button>
-          <button class="dailyForecast custom-btn">Daily</button>
-        </div>
-      </div>
-      <div class="container" id="main">
-        <div class="row cont">
-          <div class="col-sm-8">
-            <div id="weatherContainer1" class="weather-container"></div>
-            <div class="map-container">
-              <div id="map"></div>
+      <div class="container gx-0" id="mainAbout">
+        <div class="contContact">
+          <section class="contact-form-section">
+            <header class="contact-header">
+              <div class="contact-header-text">
+                <h2>Contact Us</h2>
+                <p>
+                  Need to get in touch with us? Either fill out the form below
+                  or use the contact information on the bottom.
+                </p>
+              </div>
+            </header>
+            <div id="contactForm">
+              <form id="form-contact" method="post">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required />
 
-              <div class="legend-title">Temperature (°C)</div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required />
 
-              <select id="layerSelect">
-                <option value="none">Select Layer</option>
-                <option value="precipitation">Precipitation</option>
-                <option value="clouds">Clouds</option>
-                <option value="temperature">Temperature</option>
-                <option value="pressure">Pressure</option>
-                <option value="wind">Wind</option>
-              </select>
-              <button class="expand-btn" id="expand-btn">
-                <i class="bi bi-arrows-fullscreen btn-expand-svg"></i>
-              </button>
+                <label for="message">What can we help you with</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="2"
+                  required
+                ></textarea>
+
+                <button type="submit">Send Message</button>
+              </form>
             </div>
-            <div id="weatherContainer2" class="weather-container"></div>
-            <div class="cont-city">
-              <h5>Weather conditions in Romania</h5>
+          </section>
 
-              <div id="cities-cont"></div>
+          <section class="contact-info-section">
+            <div class="info-item">
+              <i class="bi bi-telephone-fill"></i>
+              <h5>Phone</h5>
+              <p>+40 741 572 211</p>
             </div>
-          </div>
-
-          <div class="col-sm-4">
-            <div class="ads-col">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error
-              ipsam ratione voluptates sit, possimus aliquam. Nobis beatae ipsa
-              veritatis dolorum dolores incidunt facere, saepe nulla inventore,
-              temporibus perspiciatis reprehenderit hic quam alias placeat earum
-              suscipit. Iure, mollitia soluta! Libero exercitationem officiis
+            <div class="info-item">
+              <i class="bi bi-envelope-at-fill"></i>
+              <h5>Email</h5>
+              <p>support@weatherac.com</p>
             </div>
-          </div>
+            <div class="info-item">
+              <i class="bi bi-geo-alt-fill"></i>
+              <h5>Location</h5>
+              <p>St Aries 1, Craiova, RO</p>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -171,7 +146,7 @@
         <ul class="nav justify-content-center pb-3 mb-3">
           <li class="nav-item">
             <a
-              href="/term.html"
+              href="term.html"
               class="nav-link px-2 text-body-secondary"
               target="_blank"
               >Terms of Use</a
@@ -179,7 +154,7 @@
           </li>
           <li class="nav-item">
             <a
-              href="/privacy.html"
+              href="privacy.html"
               class="nav-link px-2 text-body-secondary"
               target="_blank"
               >Privacy Policy</a
@@ -187,7 +162,7 @@
           </li>
           <li class="nav-item">
             <a
-              href="/cookie.html"
+              href="cookie.html"
               class="nav-link px-2 text-body-secondary"
               target="_blank"
               >Cookie Policy</a
@@ -199,20 +174,12 @@
         </p>
       </footer>
     </div>
+    <script src="contact.js"></script>
 
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-    <script src="https://unpkg.com/leaflet-tilelayer-colorfilter"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script src="app.js"></script>
   </body>
 </html>
