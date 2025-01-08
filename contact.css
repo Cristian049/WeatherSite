@@ -95,7 +95,7 @@ p {
 }
 
 .gradient {
-  margin-top: 56px;
+  margin-top: 54px;
   will-change: background-position;
   min-height: 50vh;
   background: linear-gradient(
@@ -262,11 +262,13 @@ p {
 .footer {
   max-width: 960px;
 }
-
 footer a:hover {
-  text-decoration: underline;
+  border-bottom: 1px solid #2125299d !important;
 }
 
+footer a {
+  border-bottom: 1px solid transparent !important;
+}
 footer ul {
   border-bottom: 1px solid #b3b3b3 !important;
 }

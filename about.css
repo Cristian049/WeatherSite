@@ -91,8 +91,9 @@ p {
 .contAbout {
   background-color: white;
   border-radius: var(--border-radius) !important;
-  box-shadow: var(--box-shadow);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
   padding: 16px 24px;
+  line-height: 1.8;
 }
 
 .container {
@@ -100,12 +101,32 @@ p {
 }
 
 .gradient {
-  margin-top: 56px;
+  margin-top: 54px;
   will-change: background-position;
   min-height: 150vh;
   background: linear-gradient(
     45deg,
-    rgba(230, 237, 253, 0.5),
+    rgba(230, 237, 170, 0.8),
+    rgba(227, 228, 170, 0.8),
+    rgba(243, 244, 170, 0.8),
+    rgba(241, 247, 170, 0.8),
+    rgba(215, 234, 170, 0.8),
+    rgba(228, 238, 170, 0.8),
+    rgba(220, 222, 170, 0.8),
+    rgba(236, 241, 170, 0.8),
+    rgba(243, 247, 170, 0.8),
+    rgba(234, 239, 170, 0.8),
+    rgba(231, 232, 170, 0.8),
+    rgba(215, 221, 170, 0.8)
+  );
+  background-size: 200%;
+  animation: bgAnimatedGradient 15s infinite linear;
+}
+
+/* 
+      
+      
+     rgba(230, 237, 253, 0.5),
     rgba(227, 228, 253, 0.5),
     rgba(243, 244, 255, 0.5),
     rgba(241, 247, 255, 0.5),
@@ -116,27 +137,7 @@ p {
     rgba(243, 247, 255, 0.5),
     rgba(234, 239, 255, 0.5),
     rgba(231, 232, 255, 0.5),
-    rgba(215, 221, 255, 0.5)
-  );
-  background-size: 200%;
-  animation: bgAnimatedGradient 15s infinite linear;
-}
-
-/* 
-      
-      
-      rgba(230, 237, 170, 0.8),
-      rgba(227, 228, 170, 0.8),
-      rgba(243, 244, 170, 0.8),
-      rgba(241, 247, 170, 0.8),
-      rgba(215, 234, 170, 0.8),
-      rgba(228, 238, 170, 0.8),
-      rgba(220, 222, 170, 0.8),
-      rgba(236, 241, 170, 0.8),
-      rgba(243, 247, 170, 0.8),
-      rgba(234, 239, 170, 0.8),
-      rgba(231, 232, 170, 0.8),
-      rgba(215, 221, 170, 0.8)*/
+    rgba(215, 221, 255, 0.5)*/
 
 @keyframes bgAnimatedGradient {
   0% {
@@ -150,22 +151,21 @@ p {
   }
 }
 
-.about-body {
-  padding-right: calc(1.5rem * 0.5) !important;
-  padding-left: calc(1.5rem * 0.5) !important;
-
-  line-height: 1.8;
-  padding: 10px;
-  background-color: white;
-  color: #333;
+.last-update {
+  font-size: 0.7em;
+  color: #6c757d;
+  margin: 1em 0;
 }
+
 .about-header {
   color: #001f3d;
+  font-size: 2em;
 }
 .about-subheader {
   color: black;
   font-size: 1.8em;
   margin-top: 20px;
+  font-weight: 900;
 }
 .about-paragraph {
   font-size: 1.05em;
@@ -205,9 +205,12 @@ p {
 .footer {
   max-width: 960px;
 }
-
 footer a:hover {
-  text-decoration: underline;
+  border-bottom: 1px solid #2125299d !important;
+}
+
+footer a {
+  border-bottom: 1px solid transparent !important;
 }
 
 footer ul {
@@ -227,12 +230,6 @@ footer a {
   #navcon {
     margin: 0 12px;
   }
-  #main {
-    padding: 0 12px;
-  }
-}
-
-@media (max-width: 768px) {
   #main {
     padding: 0 12px;
   }
