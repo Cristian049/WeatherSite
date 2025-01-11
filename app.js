@@ -176,6 +176,84 @@ class WeatherCities {
   }
 }
 
+class WeatherForecastDaily {
+  constructor(apiResponse) {
+    this.city = apiResponse.city_name;
+    this.country = apiResponse.country_code;
+    this.forecast = apiResponse.data.map((day) => ({
+      date: day.datetime,
+      temperature: Math.floor(day.temp),
+      condition: day.weather.description,
+      icon: day.weather.icon,
+      realTemp: Math.floor(day.app_temp),
+      humidity: day.rh,
+      windSpeed: day.wind_spd,
+      pressure: day.pres,
+      uvindex: day.uv,
+      airQuality: day.aqi,
+    }));
+  }
+
+  getWeatherIcon(icon) {
+    return animatedWeatherIcons[icon] || "images/all/default-icon.svg";
+  }
+
+  renderForecast() {
+    const forecastContainer = document.createElement("div");
+    forecastContainer.className = "forecast-container";
+
+    this.forecast.forEach((day) => {
+      const dayCard = document.createElement("div");
+      dayCard.className = "forecast-card";
+      dayCard.innerHTML = `
+        <span class="forecast-date">${day.date}</span>
+        <span><img class="forecast-icon" src="${this.getWeatherIcon(
+          day.icon
+        )}"></span>
+        <span class="forecast-temp">${day.temperature}°C</span>
+        <span class="forecast-condition">${day.condition}</span>
+      `;
+      forecastContainer.appendChild(dayCard);
+    });
+
+    return forecastContainer;
+  }
+}
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+  resetMapView();
+  const apiKey = "05857751833645b2bbeb8c3f5d79234f";
+  const baseUrl = "https://api.weatherbit.io/v2.0/current";
+  const forecastUrl = "https://api.weatherbit.io/v2.0/forecast/daily";
+  const inputVal = inputSearch.value;
+  if (inputVal) {
+    try {
+      const res = await axios.get(`${baseUrl}?city=${inputVal}&key=${apiKey}`);
+      const forecastRes = await axios.get(
+        `${forecastUrl}?city=${inputVal}&key=${apiKey}`
+      );
+      const weatherData = new WeatherDataDaily(res.data);
+      const weatherCard = new WeatherCardDaily(weatherData);
+      weatherContainer1.innerHTML = "";
+      weatherContainer1.append(weatherCard.renderCurrent());
+      weatherContainer2.innerHTML = "";
+      const weatherForecast = new WeatherForecastDaily(forecastRes.data);
+      weatherContainer1.append(weatherForecast.renderForecast());
+      const { lat, lon } = res.data.data[0];
+      const popupContent = `
+        <b>${weatherData.city}</b><br>
+        Temperature: <b>${weatherData.temperature}°C</b><br>
+        Condition: <b>${weatherData.condition}</b>
+      `;
+      L.popup().setLatLng([lat, lon]).setContent(popupContent).openOn(map);
+      map.setView([lat, lon], 10);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+  }
+  form.reset();
+});
+
 const selectUnits = document.querySelector("#unitSelect");
 selectUnits.addEventListener("change", function (e) {
   const units = e.target.value;
@@ -364,6 +442,35 @@ class WeatherCardDaily {
     return card;
   }
 }
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(async function (position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    try {
+      const res = await axios.get(
+        `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=05857751833645b2bbeb8c3f5d79234f`
+      );
+      const weatherData = new WeatherDataDaily(res.data);
+      const popupContent = `
+        <b>${weatherData.city}</b><br>
+        <img src="${weatherData.getWeatherIcon()}" alt="${
+        weatherData.condition
+      }" class="popupImage"><br>
+        Temperature: <b>${weatherData.temperature}°C</b><br>
+        Condition: <b>${weatherData.condition}</b>
+      `;
+      const popup = L.popup()
+        .setLatLng([lat, lon])
+        .setContent(popupContent)
+        .openOn(map);
+      map.setView([lat, lon], 10);
+    } catch (error) {
+      console.error("Error fetching weather data for guest location:", error);
+    }
+  });
+} else {
+  console.error("Geolocation is not supported by this browser.");
+}
 
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
@@ -379,6 +486,15 @@ form.addEventListener("submit", async function (e) {
       weatherContainer1.innerHTML = "";
       weatherContainer1.append(weatherCard.renderCurrent());
       weatherContainer2.innerHTML = "";
+      const { lat, lon } = res.data.data[0];
+      const popupContent = `
+        <b>${weatherData.city}</b><br>
+        Temperature: <b>${weatherData.temperature}°C</b><br>
+        Condition: <b>${weatherData.condition}</b>
+      `;
+      L.popup().setLatLng([lat, lon]).setContent(popupContent).openOn(map);
+
+      map.setView([lat, lon], 10);
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
@@ -457,9 +573,19 @@ const cities = [
   { name: "Craiova", coords: [44.319305, 23.800678] },
 ];
 
-cities.forEach((city) => {
-  L.marker(city.coords).addTo(map).bindPopup(`<b>${city.name}</b>`);
-});
+// cities.forEach(async function (city) {
+//   const weatherData = await axios.get(
+//     `https://api.weatherbit.io/v2.0/current?city=${city.name}&country=RO&key=05857751833645b2bbeb8c3f5d79234f`
+//   );
+//   const temperature = weatherData.data.data[0].temp;
+//   const condition = weatherData.data.data[0].weather.description;
+//   L.marker(city.coords).addTo(map).bindPopup(`<b>${city.name}</b><br>
+//         <img src="${
+//           animatedWeatherIcons[weatherData.data.data[0].weather.icon]
+//         }" alt="${condition}" class="popupImage"><br>
+//         Temperature: <b>${temperature}°C</b><br>
+//         Condition: <b>${condition}</b>`);
+// });
 
 const apiKey = "fdb1a3699af130f0be901db0e1c63ef8";
 const layers = {
@@ -544,15 +670,6 @@ temperatureLegend.onAdd = function () {
   div.innerHTML += `<span class="legend-item">50°C</span>`;
   return div;
 };
-
-mapExpand.addEventListener("transitionend", function () {
-  const legendItems = document.querySelector(".legend");
-  if (mapExpand.classList.contains("full-map")) {
-    legendItems.style.transform = "translateY(-290%)";
-  } else {
-    legendItems.style.transform = "translateY(0)";
-  }
-});
 
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" || e.keyCode === 27) {

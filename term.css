@@ -127,25 +127,7 @@ p {
   min-height: 50vh;
   background: linear-gradient(
     45deg,
-    rgba(230, 237, 170, 0.8),
-    rgba(227, 228, 170, 0.8),
-    rgba(243, 244, 170, 0.8),
-    rgba(241, 247, 170, 0.8),
-    rgba(215, 234, 170, 0.8),
-    rgba(228, 238, 170, 0.8),
-    rgba(220, 222, 170, 0.8),
-    rgba(236, 241, 170, 0.8),
-    rgba(243, 247, 170, 0.8),
-    rgba(234, 239, 170, 0.8),
-    rgba(231, 232, 170, 0.8),
-    rgba(215, 221, 170, 0.8)
-  );
-  background-size: 200%;
-  animation: bgAnimatedGradient 15s infinite linear;
-}
-
-/* 
-       rgba(230, 237, 253, 0.5),
+    rgba(230, 237, 253, 0.5),
     rgba(227, 228, 253, 0.5),
     rgba(243, 244, 255, 0.5),
     rgba(241, 247, 255, 0.5),
@@ -156,7 +138,25 @@ p {
     rgba(243, 247, 255, 0.5),
     rgba(234, 239, 255, 0.5),
     rgba(231, 232, 255, 0.5),
-    rgba(215, 221, 255, 0.5*/
+    rgba(215, 221, 255, 0.5)
+  );
+  background-size: 200%;
+  animation: bgAnimatedGradient 15s infinite linear;
+}
+
+/* 
+       rgba(230, 237, 170, 0.8),
+    rgba(227, 228, 170, 0.8),
+    rgba(243, 244, 170, 0.8),
+    rgba(241, 247, 170, 0.8),
+    rgba(215, 234, 170, 0.8),
+    rgba(228, 238, 170, 0.8),
+    rgba(220, 222, 170, 0.8),
+    rgba(236, 241, 170, 0.8),
+    rgba(243, 247, 170, 0.8),
+    rgba(234, 239, 170, 0.8),
+    rgba(231, 232, 170, 0.8),
+    rgba(215, 221, 170, 0.8)*/
 
 @keyframes bgAnimatedGradient {
   0% {
@@ -196,10 +196,7 @@ p {
 }
 
 .main-content {
-  max-width: 1100px;
-
   background: #fff;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 strong {
@@ -264,5 +261,15 @@ footer a {
   }
   #main {
     padding: 0 12px;
+  }
+}
+
+@media (max-width: 568px) {
+  .custom-btn {
+    font-size: 1em;
+    padding: 4px 6px;
+  }
+  .contContact {
+    padding: 8px 12px;
   }
 }

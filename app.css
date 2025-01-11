@@ -250,6 +250,26 @@ input[type="search"]::-webkit-search-results-decoration {
   min-height: 150vh;
   background: linear-gradient(
     45deg,
+    rgba(230, 237, 253, 0.5),
+    rgba(227, 228, 253, 0.5),
+    rgba(243, 244, 255, 0.5),
+    rgba(241, 247, 255, 0.5),
+    rgba(215, 234, 255, 0.5),
+    rgba(228, 238, 255, 0.5),
+    rgba(220, 222, 255, 0.5),
+    rgba(236, 241, 255, 0.5),
+    rgba(243, 247, 255, 0.5),
+    rgba(234, 239, 255, 0.5),
+    rgba(231, 232, 255, 0.5),
+    rgba(215, 221, 255, 0.5)
+  );
+  background-size: 200%;
+  animation: bgAnimatedGradient 15s infinite linear;
+}
+
+/* 
+    
+    
     rgba(230, 237, 170, 0.8),
     rgba(227, 228, 170, 0.8),
     rgba(243, 244, 170, 0.8),
@@ -261,27 +281,7 @@ input[type="search"]::-webkit-search-results-decoration {
     rgba(243, 247, 170, 0.8),
     rgba(234, 239, 170, 0.8),
     rgba(231, 232, 170, 0.8),
-    rgba(215, 221, 170, 0.8)
-  );
-  background-size: 200%;
-  animation: bgAnimatedGradient 15s infinite linear;
-}
-
-/* 
-    
-    
-    rrgba(230, 237, 253, 0.5),
-    rgba(227, 228, 253, 0.5),
-    rgba(243, 244, 255, 0.5),
-    rgba(241, 247, 255, 0.5),
-    rgba(215, 234, 255, 0.5),
-    rgba(228, 238, 255, 0.5),
-    rgba(220, 222, 255, 0.5),
-    rgba(236, 241, 255, 0.5),
-    rgba(243, 247, 255, 0.5),
-    rgba(234, 239, 255, 0.5),
-    rgba(231, 232, 255, 0.5),
-    rgba(215, 221, 255, 0.5)*/
+    rgba(215, 221, 170, 0.8))*/
 
 @keyframes bgAnimatedGradient {
   0% {
@@ -322,6 +322,11 @@ input[type="search"]::-webkit-search-results-decoration {
 .custom-btn:focus {
   border-color: #ff6600;
   opacity: 100%;
+}
+
+.popupImage {
+  width: 50px;
+  height: 50px;
 }
 
 .weather-card {
