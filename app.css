@@ -484,6 +484,69 @@ input[type="search"]::-webkit-search-results-decoration {
   font-weight: 400;
   min-width: 64px;
 }
+
+.forecast-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.forecast-container {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scroll-behavior: smooth;
+  width: 100%;
+  background-color: #f0f0f0; /* Optional for clarity */
+  position: relative; /* Ensure it acts as a reference for the buttons */
+}
+
+.scroll-button {
+  position: absolute;
+  width: 30px; /* Width of the button */
+  height: 30%; /* Full height of the container */
+  border: none;
+  color: #191c1f;
+  background-color: #91919168;
+  cursor: pointer;
+  z-index: 10; /* Ensure it stays above other content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.scroll-button.left {
+  left: 0; /* Stick to the left of the container */
+  border-bottom-right-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.scroll-button.right {
+  right: 0; /* Stick to the right of the container */
+
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.forecast-container {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.forecastCont {
+  margin-bottom: 1em;
+}
+
+.forecast-card {
+  flex: none;
+  width: 20%;
+  background-color: var(--color);
+  padding: 15px;
+}
+
 /* MAIN */
 
 /* FOOTER */

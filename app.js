@@ -199,6 +199,17 @@ class WeatherForecastDaily {
   }
 
   renderForecast() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "forecast-wrapper";
+
+    const leftButton = document.createElement("button");
+    leftButton.className = "scroll-button left";
+    leftButton.innerHTML = `<i class="bi bi-caret-left-fill"></i>`;
+
+    const rightButton = document.createElement("button");
+    rightButton.className = "scroll-button right";
+    rightButton.innerHTML = `<i class="bi bi-caret-right-fill"></i>`;
+
     const forecastContainer = document.createElement("div");
     forecastContainer.className = "forecast-container";
 
@@ -207,7 +218,7 @@ class WeatherForecastDaily {
       dayCard.className = "forecast-card";
       dayCard.innerHTML = `
         <span class="forecast-date">${day.date}</span>
-        <span><img class="forecast-icon" src="${this.getWeatherIcon(
+        <span class="forecast-img"><img class="forecast-icon" src="${this.getWeatherIcon(
           day.icon
         )}"></span>
         <span class="forecast-temp">${day.temperature}°C</span>
@@ -216,9 +227,41 @@ class WeatherForecastDaily {
       forecastContainer.appendChild(dayCard);
     });
 
-    return forecastContainer;
+    wrapper.appendChild(leftButton);
+    wrapper.appendChild(forecastContainer);
+    wrapper.appendChild(rightButton);
+
+    return wrapper;
   }
 }
+
+function initializeScrollButtons() {
+  const scrollContainer = document.querySelector(".forecast-container");
+  const scrollLeftButton = document.querySelector(".scroll-button.left");
+  const scrollRightButton = document.querySelector(".scroll-button.right");
+
+  const scrollAmount = 300;
+
+  scrollLeftButton.addEventListener("click", () => {
+    scrollContainer.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+  });
+
+  scrollRightButton.addEventListener("click", () => {
+    scrollContainer.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  });
+
+  function updateButtonState() {
+    scrollLeftButton.disabled = scrollContainer.scrollLeft === 0;
+    scrollRightButton.disabled =
+      scrollContainer.scrollLeft + scrollContainer.offsetWidth >=
+      scrollContainer.scrollWidth;
+  }
+
+  scrollContainer.addEventListener("scroll", updateButtonState);
+  updateButtonState();
+}
+
+const forecastCont = document.querySelector(".forecastCont");
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
   resetMapView();
@@ -237,8 +280,11 @@ form.addEventListener("submit", async function (e) {
       weatherContainer1.innerHTML = "";
       weatherContainer1.append(weatherCard.renderCurrent());
       weatherContainer2.innerHTML = "";
+      forecastCont.innerHTML = "";
       const weatherForecast = new WeatherForecastDaily(forecastRes.data);
-      weatherContainer1.append(weatherForecast.renderForecast());
+      weatherContainer2.append(forecastCont);
+      forecastCont.append(weatherForecast.renderForecast());
+      initializeScrollButtons();
       const { lat, lon } = res.data.data[0];
       const popupContent = `
         <b>${weatherData.city}</b><br>
@@ -518,6 +564,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const selectedCities = getRandomCities(2);
   const weatherContainer1 = document.getElementById("weatherContainer1");
   const weatherContainer2 = document.getElementById("weatherContainer2");
+  const forecastCont = document.querySelector(".forecastCont");
   if (!weatherContainer1 || !weatherContainer2) {
     console.error("Weather containers not found in the DOM.");
     return;
