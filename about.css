@@ -205,6 +205,7 @@ p {
 .footer {
   max-width: 960px;
 }
+
 footer a:hover {
   border-bottom: 1px solid #2125299d !important;
 }
@@ -212,14 +213,15 @@ footer a:hover {
 footer a {
   border-bottom: 1px solid transparent !important;
 }
-
 footer ul {
   border-bottom: 1px solid #b3b3b3 !important;
 }
 
 footer a {
+  margin-bottom: 1px !important;
   padding-bottom: 0 !important;
   padding-top: 0 !important;
+  transition: all 0.3s ease !important;
 }
 
 .footer-cont {

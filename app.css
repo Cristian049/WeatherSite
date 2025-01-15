@@ -306,6 +306,10 @@ input[type="search"]::-webkit-search-results-decoration {
   max-width: 960px;
 }
 
+.removeBtnList {
+  display: none;
+}
+
 .custom-btn {
   border: none;
   background-color: transparent;
@@ -432,7 +436,8 @@ input[type="search"]::-webkit-search-results-decoration {
   font-size: 20px;
   display: flex;
   font-weight: 600;
-  text-align: left;
+  text-align: center;
+  padding: 10px;
 }
 
 .ads-col {
@@ -493,47 +498,48 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .forecast-container {
   display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  scroll-behavior: smooth;
+  position: relative;
+  scroll-behavior: auto;
+  overflow-x: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #91919168 #f1f1f1;
   width: 100%;
-  background-color: #f0f0f0; /* Optional for clarity */
-  position: relative; /* Ensure it acts as a reference for the buttons */
+  background-color: var(--color);
+  flex-direction: row;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 .scroll-button {
   position: absolute;
-  width: 30px; /* Width of the button */
-  height: 30%; /* Full height of the container */
+  width: 30px;
+  height: 25%;
   border: none;
-  color: #191c1f;
+  color: #1c1e20;
   background-color: #91919168;
   cursor: pointer;
-  z-index: 10; /* Ensure it stays above other content */
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
+  transition: all 0.2s ease;
+}
+
+.scroll-button:hover {
+  background-color: #9191919c;
 }
 
 .scroll-button.left {
-  left: 0; /* Stick to the left of the container */
+  left: 0;
   border-bottom-right-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 }
 
 .scroll-button.right {
-  right: 0; /* Stick to the right of the container */
-
+  right: 0;
   border-top-left-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
-}
-
-.forecast-container {
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
 }
 
 .forecastCont {
@@ -543,10 +549,71 @@ input[type="search"]::-webkit-search-results-decoration {
 .forecast-card {
   flex: none;
   width: 20%;
-  background-color: var(--color);
-  padding: 15px;
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin: 10px 5px;
 }
 
+.forecast-card:first-child {
+  margin-left: 10px;
+}
+
+.forecast-card:last-child {
+  margin-right: 10px;
+}
+
+.forecast-date {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.forecast-temp {
+  font-size: 1.1em;
+  font-weight: 400;
+  display: block;
+}
+
+.forecast-value {
+  font-size: 1em;
+  font-weight: 100 !important;
+}
+.minTemp {
+  margin-left: -20px;
+  font-size: 25px;
+  opacity: 0.6;
+  font-weight: 600;
+}
+
+.additional-info-table {
+  width: 80%;
+  align-self: center;
+}
+
+.daily-cont {
+  width: 100%;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1em;
+}
+
+.weather-temp-all {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1.5em;
+}
+
+.temperature-max,
+.temperature-min {
+  font-size: 1.1em;
+  font-weight: 900;
+}
 /* MAIN */
 
 /* FOOTER */
@@ -617,6 +684,9 @@ footer a {
   }
   #condition {
     margin-top: 1em !important;
+  }
+  .forecast-card {
+    width: 100px;
   }
 }
 

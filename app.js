@@ -157,6 +157,85 @@ const roCities = [
   { name: "Suceava" },
 ];
 
+const map = L.map("map", { attributionControl: false }).setView(
+  [45.9432, 24.9668],
+  6
+);
+
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 13,
+  attribution:
+    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+}).addTo(map);
+
+const apiKey = "fdb1a3699af130f0be901db0e1c63ef8";
+const layers = {
+  precipitation: L.tileLayer(
+    `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`,
+    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
+  ),
+  clouds: L.tileLayer(
+    `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${apiKey}`,
+    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
+  ),
+  temperature: L.tileLayer(
+    `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`,
+    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
+  ),
+  pressure: L.tileLayer(
+    `https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${apiKey}`,
+    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
+  ),
+  wind: L.tileLayer(
+    `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${apiKey}`,
+    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
+  ),
+};
+
+const layerSelect = document.getElementById("layerSelect");
+let activeLayer = null;
+
+layerSelect.addEventListener("change", (event) => {
+  const selectedLayer = event.target.value;
+
+  if (activeLayer) {
+    map.removeLayer(activeLayer);
+  }
+
+  if (selectedLayer !== "none" && layers[selectedLayer]) {
+    activeLayer = layers[selectedLayer];
+    activeLayer.addTo(map);
+  }
+  if (selectedLayer === "temperature") {
+    temperatureLegend.addTo(map);
+  } else {
+    map.removeControl(temperatureLegend);
+  }
+});
+
+function formatTime() {
+  const now = new Date();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  const formattedHours = hours < 10 ? "0" + hours : hours;
+  const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+  return `${formattedHours}:${formattedMinutes} ${ampm}`;
+}
+
+function getRandomCities(numberOfCities) {
+  const shuffledCities = [...featuredCities];
+  for (let i = shuffledCities.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledCities[i], shuffledCities[j]] = [
+      shuffledCities[j],
+      shuffledCities[i],
+    ];
+  }
+  return shuffledCities.slice(0, numberOfCities);
+}
 class WeatherCities {
   constructor(weatherData) {
     this.weatherData = weatherData;
@@ -171,99 +250,67 @@ class WeatherCities {
     <span class="rocity-temp">${Math.floor(
       this.weatherData.temperature
     )}°C</span>`;
-
     return cityCard;
   }
 }
 
-class WeatherForecastDaily {
-  constructor(apiResponse) {
-    this.city = apiResponse.city_name;
-    this.country = apiResponse.country_code;
-    this.forecast = apiResponse.data.map((day) => ({
-      date: day.datetime,
-      temperature: Math.floor(day.temp),
-      condition: day.weather.description,
-      icon: day.weather.icon,
-      realTemp: Math.floor(day.app_temp),
-      humidity: day.rh,
-      windSpeed: day.wind_spd,
-      pressure: day.pres,
-      uvindex: day.uv,
-      airQuality: day.aqi,
-    }));
+const mapExpand = document.querySelector(".map-container");
+const expandBtn = document.querySelector("#expand-btn");
+const body = document.querySelector("body");
+
+expandBtn.addEventListener("click", function () {
+  if (mapExpand.classList.contains("full-map")) {
+    mapExpand.classList.remove("full-map");
+    expandBtn.classList.remove("full-map-btn");
+    expandBtn.classList.add("expand-btn");
+    body.classList.remove("hide-scroll");
+    map.invalidateSize();
+  } else {
+    mapExpand.classList.add("full-map");
+    expandBtn.classList.remove("expand-btn");
+    expandBtn.classList.add("full-map-btn");
+    body.classList.add("hide-scroll");
+    map.invalidateSize();
   }
+});
 
-  getWeatherIcon(icon) {
-    return animatedWeatherIcons[icon] || "images/all/default-icon.svg";
-  }
-
-  renderForecast() {
-    const wrapper = document.createElement("div");
-    wrapper.className = "forecast-wrapper";
-
-    const leftButton = document.createElement("button");
-    leftButton.className = "scroll-button left";
-    leftButton.innerHTML = `<i class="bi bi-caret-left-fill"></i>`;
-
-    const rightButton = document.createElement("button");
-    rightButton.className = "scroll-button right";
-    rightButton.innerHTML = `<i class="bi bi-caret-right-fill"></i>`;
-
-    const forecastContainer = document.createElement("div");
-    forecastContainer.className = "forecast-container";
-
-    this.forecast.forEach((day) => {
-      const dayCard = document.createElement("div");
-      dayCard.className = "forecast-card";
-      dayCard.innerHTML = `
-        <span class="forecast-date">${day.date}</span>
-        <span class="forecast-img"><img class="forecast-icon" src="${this.getWeatherIcon(
-          day.icon
-        )}"></span>
-        <span class="forecast-temp">${day.temperature}°C</span>
-        <span class="forecast-condition">${day.condition}</span>
-      `;
-      forecastContainer.appendChild(dayCard);
-    });
-
-    wrapper.appendChild(leftButton);
-    wrapper.appendChild(forecastContainer);
-    wrapper.appendChild(rightButton);
-
-    return wrapper;
-  }
+function resetMapView() {
+  mapExpand.classList.remove("full-map");
+  expandBtn.classList.remove("full-map-btn");
+  expandBtn.classList.add("expand-btn");
+  body.classList.remove("hide-scroll");
+  map.invalidateSize();
+  scrollTo(0, 0);
 }
 
-function initializeScrollButtons() {
-  const scrollContainer = document.querySelector(".forecast-container");
-  const scrollLeftButton = document.querySelector(".scroll-button.left");
-  const scrollRightButton = document.querySelector(".scroll-button.right");
+const temperatureLegend = L.control({ position: "bottomright" });
 
-  const scrollAmount = 300;
+temperatureLegend.onAdd = function () {
+  const div = L.DomUtil.create("div", "legend");
+  div.innerHTML += '<span class="legend-item">-30°C</span>';
+  div.innerHTML += '<div class="gradient-bar"></div>';
+  div.innerHTML += `<span class="legend-item">50°C</span>`;
+  return div;
+};
 
-  scrollLeftButton.addEventListener("click", () => {
-    scrollContainer.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-  });
-
-  scrollRightButton.addEventListener("click", () => {
-    scrollContainer.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  });
-
-  function updateButtonState() {
-    scrollLeftButton.disabled = scrollContainer.scrollLeft === 0;
-    scrollRightButton.disabled =
-      scrollContainer.scrollLeft + scrollContainer.offsetWidth >=
-      scrollContainer.scrollWidth;
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" || e.keyCode === 27) {
+    mapExpand.classList.remove("full-map");
+    expandBtn.classList.remove("full-map-btn");
+    expandBtn.classList.add("expand-btn");
+    body.classList.remove("hide-scroll");
+    map.invalidateSize();
   }
+});
 
-  scrollContainer.addEventListener("scroll", updateButtonState);
-  updateButtonState();
-}
-
-const forecastCont = document.querySelector(".forecastCont");
+const btnList = document.querySelector(".btnList");
+const contCities = document.querySelector(".cont-city");
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
+  const searchValue = inputSearch.value;
+  localStorage.setItem("lastSearch", searchValue);
+  btnList.classList.remove("removeBtnList");
+  mapExpand.style.display = `flex`;
   resetMapView();
   const apiKey = "05857751833645b2bbeb8c3f5d79234f";
   const baseUrl = "https://api.weatherbit.io/v2.0/current";
@@ -279,7 +326,7 @@ form.addEventListener("submit", async function (e) {
       const weatherCard = new WeatherCardDaily(weatherData);
       weatherContainer1.innerHTML = "";
       weatherContainer1.append(weatherCard.renderCurrent());
-      weatherContainer2.innerHTML = "";
+      weatherContainer2.innerHTML = "<h5>Forecast for 16 days</h5> ";
       forecastCont.innerHTML = "";
       const weatherForecast = new WeatherForecastDaily(forecastRes.data);
       weatherContainer2.append(forecastCont);
@@ -321,7 +368,26 @@ selectUnits.addEventListener("change", function (e) {
   celsius.forEach((cel) => {
     cel.textContent = unitSymbol;
   });
-
+  const forecastTemps = document.querySelectorAll(".forecast-temp");
+  forecastTemps.forEach((temp) => {
+    const currentTemp = parseFloat(temp.textContent);
+    temp.textContent =
+      units === "I"
+        ? Math.floor((currentTemp * 9) / 5 + 32)
+        : Math.floor(((currentTemp - 32) * 5) / 9);
+    temp.textContent += `°`;
+  });
+  const minTemps = document.querySelectorAll(".minTemp");
+  minTemps.forEach((minTemp) => {
+    const currentMinTemp = parseFloat(
+      minTemp.textContent.replace(/[^\d.-]/g, "")
+    );
+    minTemp.textContent =
+      units === "I"
+        ? Math.floor((currentMinTemp * 9) / 5 + 32)
+        : Math.floor(((currentMinTemp - 32) * 5) / 9);
+    minTemp.textContent += `°${unitSymbol}`;
+  });
   weatherCardsCities.forEach((card) => {
     const tempElement = card.querySelector(".rocity-temp");
     const currentTemp = parseFloat(tempElement.textContent);
@@ -359,6 +425,10 @@ async function runRoCities() {
   for (let cities of roCities) {
     const city = cities.name;
     const weatherContainerCities = document.querySelector("#cities-cont");
+    if (!weatherContainerCities) {
+      console.error("Element with ID 'cities-cont' not found in the DOM.");
+      return;
+    }
     try {
       const res = await axios.get(
         `https://api.weatherbit.io/v2.0/current?city=${city}&country=RO&key=05857751833645b2bbeb8c3f5d79234f	&units=M`
@@ -372,19 +442,9 @@ async function runRoCities() {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", runRoCities);
-
-function formatTime() {
-  const now = new Date();
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
-  const ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  const formattedHours = hours < 10 ? "0" + hours : hours;
-  const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-  return `${formattedHours}:${formattedMinutes} ${ampm}`;
-}
+document.addEventListener("DOMContentLoaded", function () {
+  runRoCities();
+});
 
 class WeatherDataDaily {
   constructor(apiResponse) {
@@ -518,50 +578,9 @@ if (navigator.geolocation) {
   console.error("Geolocation is not supported by this browser.");
 }
 
-form.addEventListener("submit", async function (e) {
-  e.preventDefault();
-  resetMapView();
-  const apiKey = "05857751833645b2bbeb8c3f5d79234f	";
-  const baseUrl = "https://api.weatherbit.io/v2.0/current";
-  const inputVal = inputSearch.value;
-  if (inputVal) {
-    try {
-      const res = await axios.get(`${baseUrl}?city=${inputVal}&key=${apiKey}`);
-      const weatherData = new WeatherDataDaily(res.data);
-      const weatherCard = new WeatherCardDaily(weatherData);
-      weatherContainer1.innerHTML = "";
-      weatherContainer1.append(weatherCard.renderCurrent());
-      weatherContainer2.innerHTML = "";
-      const { lat, lon } = res.data.data[0];
-      const popupContent = `
-        <b>${weatherData.city}</b><br>
-        Temperature: <b>${weatherData.temperature}°C</b><br>
-        Condition: <b>${weatherData.condition}</b>
-      `;
-      L.popup().setLatLng([lat, lon]).setContent(popupContent).openOn(map);
-
-      map.setView([lat, lon], 10);
-    } catch (error) {
-      console.error("Error fetching weather data:", error);
-    }
-  }
-  form.reset();
-});
-
-function getRandomCities(numberOfCities) {
-  const shuffledCities = [...featuredCities];
-  for (let i = shuffledCities.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledCities[i], shuffledCities[j]] = [
-      shuffledCities[j],
-      shuffledCities[i],
-    ];
-  }
-  return shuffledCities.slice(0, numberOfCities);
-}
-
 document.addEventListener("DOMContentLoaded", async function () {
-  const selectedCities = getRandomCities(2);
+  btnList.classList.add("removeBtnList");
+  const selectedCities = getRandomCities(4);
   const weatherContainer1 = document.getElementById("weatherContainer1");
   const weatherContainer2 = document.getElementById("weatherContainer2");
   const forecastCont = document.querySelector(".forecastCont");
@@ -569,12 +588,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.error("Weather containers not found in the DOM.");
     return;
   }
-
   weatherContainer1.innerHTML = "";
   weatherContainer2.innerHTML = "";
-
   const midpoint = Math.ceil(selectedCities.length / 2);
-
   for (let i = 0; i < selectedCities.length; i++) {
     const city = selectedCities[i];
     try {
@@ -599,131 +615,239 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-const map = L.map("map", { attributionControl: false }).setView(
-  [45.9432, 24.9668],
-  6
-);
-
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 13,
-  attribution:
-    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-}).addTo(map);
-
-const cities = [
-  { name: "Bucharest", coords: [44.439663, 26.096306] },
-  { name: "Cluj-Napoca", coords: [46.770439, 23.591423] },
-  { name: "Timișoara", coords: [45.760696, 21.226788] },
-  { name: "Iași", coords: [47.151726, 27.587914] },
-  { name: "Constanța", coords: [44.179249, 28.64994] },
-  { name: "Brașov", coords: [45.657974, 25.601198] },
-  { name: "Craiova", coords: [44.319305, 23.800678] },
-];
-
-// cities.forEach(async function (city) {
-//   const weatherData = await axios.get(
-//     `https://api.weatherbit.io/v2.0/current?city=${city.name}&country=RO&key=05857751833645b2bbeb8c3f5d79234f`
-//   );
-//   const temperature = weatherData.data.data[0].temp;
-//   const condition = weatherData.data.data[0].weather.description;
-//   L.marker(city.coords).addTo(map).bindPopup(`<b>${city.name}</b><br>
-//         <img src="${
-//           animatedWeatherIcons[weatherData.data.data[0].weather.icon]
-//         }" alt="${condition}" class="popupImage"><br>
-//         Temperature: <b>${temperature}°C</b><br>
-//         Condition: <b>${condition}</b>`);
-// });
-
-const apiKey = "fdb1a3699af130f0be901db0e1c63ef8";
-const layers = {
-  precipitation: L.tileLayer(
-    `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`,
-    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
-  ),
-  clouds: L.tileLayer(
-    `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${apiKey}`,
-    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
-  ),
-  temperature: L.tileLayer(
-    `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`,
-    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
-  ),
-  pressure: L.tileLayer(
-    `https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${apiKey}`,
-    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
-  ),
-  wind: L.tileLayer(
-    `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${apiKey}`,
-    { maxZoom: 13, opacity: 1, attribution: "Weather data by OpenWeatherMap" }
-  ),
-};
-
-const layerSelect = document.getElementById("layerSelect");
-let activeLayer = null;
-
-layerSelect.addEventListener("change", (event) => {
-  const selectedLayer = event.target.value;
-
-  if (activeLayer) {
-    map.removeLayer(activeLayer);
+class WeatherForecastDaily {
+  constructor(apiResponse) {
+    this.city = apiResponse.city_name;
+    this.country = apiResponse.country_code;
+    this.forecast = apiResponse.data.map((day) => ({
+      date: day.datetime,
+      temperature: Math.floor(day.temp),
+      condition: day.weather.description,
+      icon: day.weather.icon,
+      realTemp: Math.floor(day.app_temp),
+      humidity: day.rh,
+      windSpeed: day.wind_spd,
+      pressure: day.pres,
+      uvindex: day.uv,
+      maxTemp: Math.floor(day.max_temp),
+      minTemp: Math.floor(day.min_temp),
+    }));
   }
 
-  if (selectedLayer !== "none" && layers[selectedLayer]) {
-    activeLayer = layers[selectedLayer];
-    activeLayer.addTo(map);
+  getWeatherIcon(icon) {
+    return animatedWeatherIcons[icon] || "images/all/default-icon.svg";
   }
-  if (selectedLayer === "temperature") {
-    temperatureLegend.addTo(map);
-  } else {
-    map.removeControl(temperatureLegend);
+
+  renderForecast() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "forecast-wrapper";
+
+    const leftButton = document.createElement("button");
+    leftButton.className = "scroll-button left";
+    leftButton.innerHTML = `<i class="bi bi-caret-left-fill"></i>`;
+
+    const rightButton = document.createElement("button");
+    rightButton.className = "scroll-button right";
+    rightButton.innerHTML = `<i class="bi bi-caret-right-fill"></i>`;
+
+    const forecastContainer = document.createElement("div");
+    forecastContainer.className = "forecast-container";
+
+    this.forecast.forEach((day) => {
+      const dayCard = document.createElement("div");
+      dayCard.className = "forecast-card";
+      dayCard.innerHTML = `
+        <span class="forecast-date">${day.date}</span>
+        <span class="forecast-img"><img class="forecast-icon" src="${this.getWeatherIcon(
+          day.icon
+        )}"></span>
+        <span class="forecast-temp">Max: ${
+          day.maxTemp
+        }°<span class="temp-unit">C</span></span>
+        <span class="forecast-temp"><span class="forecast-value">Min:</span> ${
+          day.minTemp
+        }°<span class="temp-unit">C</span></span>
+        <span class="forecast-condition">${day.condition}</span>
+      `;
+      forecastContainer.appendChild(dayCard);
+    });
+
+    wrapper.appendChild(leftButton);
+    wrapper.appendChild(forecastContainer);
+    wrapper.appendChild(rightButton);
+
+    return wrapper;
   }
-});
 
-const mapExpand = document.querySelector(".map-container");
-const expandBtn = document.querySelector("#expand-btn");
-const body = document.querySelector("body");
+  renderForecastCards() {
+    const forecastDaily = document.createElement("div");
+    forecastDaily.classList = "forecastDaily";
+    const bigCont = document.querySelector(".big-cont");
 
-expandBtn.addEventListener("click", function () {
-  if (mapExpand.classList.contains("full-map")) {
-    mapExpand.classList.remove("full-map");
-    expandBtn.classList.remove("full-map-btn");
-    expandBtn.classList.add("expand-btn");
-    body.classList.remove("hide-scroll");
-    map.invalidateSize();
-  } else {
-    mapExpand.classList.add("full-map");
-    expandBtn.classList.remove("expand-btn");
-    expandBtn.classList.add("full-map-btn");
-    body.classList.add("hide-scroll");
-    map.invalidateSize();
+    this.forecast.forEach((day) => {
+      const dailyCont = document.createElement("div");
+      dailyCont.classList.add("daily-cont");
+      dailyCont.innerHTML = `
+            <div class="weather-header">
+                <p id="city-name">${this.city}</p>
+                <span id="local-date">${day.date}</span>
+            </div>
+            <div class="weather-value">
+                <div id="weather-info">
+                    <div class="weather-temps">
+                        <div class="weather-icon-container">
+                            <img class="weather-icon" src="${this.getWeatherIcon(
+                              day.icon
+                            )}" />
+                        </div>
+                        <div class="weather-temp-all">
+                        <div class="weather-temp">
+                                    <span class="temperature">${
+                                      day.maxTemp
+                                    }<span class="temp-circle">°</span></span>
+                                 <span class="minTemp">/${day.minTemp}°C</span>
+                                 
+                                </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <p id="condition">${day.condition}</p>
+                </div>
+                <div class="additional-info-table">
+                    <p class="spaced-content">
+                        <span class="weather-description">Humidity</span>
+                        <span class="table-value">${day.humidity}%</span>
+                    </p>
+                    <p class="spaced-content">
+                        <span class="weather-description">Wind</span>
+                        <span class="table-value wind-speed">${
+                          day.windSpeed
+                        } km/h</span>
+                    </p>
+                    <p class="spaced-content">
+                        <span class="weather-description">Pressure</span>
+                        <span class="table-value">${day.pressure} hPa</span>
+                    </p>
+                    <p class="spaced-content">
+                        <span class="weather-description">UV Index Max</span>
+                        <span class="table-value">${day.uvindex} of 11</span>
+                    </p>
+                </div>
+            </div>
+        `;
+      forecastDaily.appendChild(dailyCont);
+    });
+
+    return forecastDaily;
   }
-});
-
-function resetMapView() {
-  mapExpand.classList.remove("full-map");
-  expandBtn.classList.remove("full-map-btn");
-  expandBtn.classList.add("expand-btn");
-  body.classList.remove("hide-scroll");
-  map.invalidateSize();
-  scrollTo(0, 0);
 }
 
-const temperatureLegend = L.control({ position: "bottomright" });
+document
+  .querySelector(".currentForcast")
+  .addEventListener("click", async function () {
+    const lastSearch = localStorage.getItem("lastSearch");
+    if (lastSearch) {
+      inputSearch.value = lastSearch;
+    }
+    btnList.classList.remove("removeBtnList");
+    contCities.style.display = "block";
+    mapExpand.style.display = `flex`;
+    resetMapView();
+    const apiKey = "05857751833645b2bbeb8c3f5d79234f";
+    const baseUrl = "https://api.weatherbit.io/v2.0/current";
+    const forecastUrl = "https://api.weatherbit.io/v2.0/forecast/daily";
+    if (inputSearch.value) {
+      try {
+        const res = await axios.get(
+          `${baseUrl}?city=${inputSearch.value}&key=${apiKey}`
+        );
+        const forecastRes = await axios.get(
+          `${forecastUrl}?city=${inputSearch.value}&key=${apiKey}`
+        );
+        const weatherData = new WeatherDataDaily(res.data);
+        const weatherCard = new WeatherCardDaily(weatherData);
+        weatherContainer1.innerHTML = "";
+        weatherContainer1.append(weatherCard.renderCurrent());
+        weatherContainer2.innerHTML = "<h5>Forecast for 16 days</h5> ";
+        forecastCont.innerHTML = "";
+        const weatherForecast = new WeatherForecastDaily(forecastRes.data);
+        weatherContainer2.append(forecastCont);
+        forecastCont.append(weatherForecast.renderForecast());
+        initializeScrollButtons();
+        const { lat, lon } = res.data.data[0];
+        const popupContent = `
+        <b>${weatherData.city}</b><br>
+        Temperature: <b>${weatherData.temperature}°C</b><br>
+        Condition: <b>${weatherData.condition}</b>
+      `;
+        L.popup().setLatLng([lat, lon]).setContent(popupContent).openOn(map);
+        map.setView([lat, lon], 10);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    }
+    form.reset();
+  });
 
-temperatureLegend.onAdd = function () {
-  const div = L.DomUtil.create("div", "legend");
-  div.innerHTML += '<span class="legend-item">-30°C</span>';
-  div.innerHTML += '<div class="gradient-bar"></div>';
-  div.innerHTML += `<span class="legend-item">50°C</span>`;
-  return div;
-};
+document
+  .querySelector(".dailyForecast")
+  .addEventListener("click", async function () {
+    const lastSearch = localStorage.getItem("lastSearch");
+    if (lastSearch) {
+      inputSearch.value = lastSearch;
+    }
+    const apiKey = "05857751833645b2bbeb8c3f5d79234f";
+    const forecastUrl = "https://api.weatherbit.io/v2.0/forecast/daily";
+    const bigCont = document.querySelector(".big-cont");
+    weatherContainer1.innerHTML = "";
+    weatherContainer2.innerHTML = "";
+    contCities.style.display = "none";
+    mapExpand.style.display = `none`;
+    if (inputSearch.value) {
+      try {
+        const forecastRes = await axios.get(
+          `${forecastUrl}?city=${inputSearch.value}&key=${apiKey}`
+        );
+        const weatherForecast = new WeatherForecastDaily(forecastRes.data);
+        weatherContainer1.append(weatherForecast.renderForecastCards());
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    }
+    form.reset();
+  });
 
-document.addEventListener("keydown", function (e) {
-  if (e.key === "Escape" || e.keyCode === 27) {
-    mapExpand.classList.remove("full-map");
-    expandBtn.classList.remove("full-map-btn");
-    expandBtn.classList.add("expand-btn");
-    body.classList.remove("hide-scroll");
-    map.invalidateSize();
+function initializeScrollButtons() {
+  const scrollContainer = document.querySelector(".forecast-container");
+  const scrollLeftButton = document.querySelector(".scroll-button.left");
+  const scrollRightButton = document.querySelector(".scroll-button.right");
+  const scrollAmount = 300;
+  scrollLeftButton.addEventListener("click", () => {
+    scrollContainer.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+  });
+  scrollRightButton.addEventListener("click", () => {
+    scrollContainer.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  });
+  function updateButtonVisibility() {
+    scrollLeftButton.style.display =
+      scrollContainer.scrollLeft === 0 ? "none" : "block";
+    scrollRightButton.style.display =
+      scrollContainer.scrollLeft + scrollContainer.offsetWidth >=
+      scrollContainer.scrollWidth
+        ? "none"
+        : "block";
   }
-});
+  scrollContainer.addEventListener("scroll", updateButtonVisibility);
+  updateButtonVisibility();
+  function updateButtonState() {
+    scrollLeftButton.disabled = scrollContainer.scrollLeft === 0;
+    scrollRightButton.disabled =
+      scrollContainer.scrollLeft + scrollContainer.offsetWidth >=
+      scrollContainer.scrollWidth;
+  }
+  scrollContainer.addEventListener("scroll", updateButtonState);
+  updateButtonState();
+}
+
+const forecastCont = document.querySelector(".forecastCont");
