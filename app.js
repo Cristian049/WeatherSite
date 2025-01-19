@@ -302,7 +302,7 @@ document.addEventListener("keydown", function (e) {
     map.invalidateSize();
   }
 });
-
+const hourlyCont = document.querySelector(".hourlyCont");
 const btnList = document.querySelector(".btnList");
 const contCities = document.querySelector(".cont-city");
 form.addEventListener("submit", async function (e) {
@@ -315,6 +315,7 @@ form.addEventListener("submit", async function (e) {
   const apiKey = "05857751833645b2bbeb8c3f5d79234f";
   const baseUrl = "https://api.weatherbit.io/v2.0/current";
   const forecastUrl = "https://api.weatherbit.io/v2.0/forecast/daily";
+  const hourlyUrl = "https://api.weatherbit.io/v2.0/forecast/hourly";
   const inputVal = inputSearch.value;
   if (inputVal) {
     try {
@@ -322,16 +323,23 @@ form.addEventListener("submit", async function (e) {
       const forecastRes = await axios.get(
         `${forecastUrl}?city=${inputVal}&key=${apiKey}`
       );
+      const forecastHourly = await axios.get(
+        `${hourlyUrl}?city=${inputVal}&key=${apiKey}`
+      );
       const weatherData = new WeatherDataDaily(res.data);
       const weatherCard = new WeatherCardDaily(weatherData);
+      const weatherForecast = new WeatherForecastDaily(forecastRes.data);
       weatherContainer1.innerHTML = "";
       weatherContainer1.append(weatherCard.renderCurrent());
-      weatherContainer2.innerHTML = "<h5>Forecast for 16 days</h5> ";
-      forecastCont.innerHTML = "";
-      const weatherForecast = new WeatherForecastDaily(forecastRes.data);
-      weatherContainer2.append(forecastCont);
+      weatherContainer1.append(forecastCont);
+      forecastCont.innerHTML = "<h5>Forecast for 16 days</h5>";
       forecastCont.append(weatherForecast.renderForecast());
+      weatherContainer2.innerHTML = "<h5>Forecast for 48 hours</h5> ";
+      const hourlyForecast = new WeatherForecastHourly(forecastHourly.data);
+      weatherContainer2.append(hourlyCont);
+      hourlyCont.append(hourlyForecast.renderForecastHourly());
       initializeScrollButtons();
+      initializeScrollButtonsHourly();
       const { lat, lon } = res.data.data[0];
       const popupContent = `
         <b>${weatherData.city}</b><br>
@@ -340,6 +348,7 @@ form.addEventListener("submit", async function (e) {
       `;
       L.popup().setLatLng([lat, lon]).setContent(popupContent).openOn(map);
       map.setView([lat, lon], 10);
+      setActiveButton(document.querySelector(".currentForecast"));
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
@@ -746,6 +755,7 @@ class WeatherForecastDaily {
 document
   .querySelector(".currentForcast")
   .addEventListener("click", async function () {
+    setActiveButton(this);
     const lastSearch = localStorage.getItem("lastSearch");
     if (lastSearch) {
       inputSearch.value = lastSearch;
@@ -757,6 +767,7 @@ document
     const apiKey = "05857751833645b2bbeb8c3f5d79234f";
     const baseUrl = "https://api.weatherbit.io/v2.0/current";
     const forecastUrl = "https://api.weatherbit.io/v2.0/forecast/daily";
+    const hourlyUrl = "https://api.weatherbit.io/v2.0/forecast/hourly";
     if (inputSearch.value) {
       try {
         const res = await axios.get(
@@ -765,16 +776,25 @@ document
         const forecastRes = await axios.get(
           `${forecastUrl}?city=${inputSearch.value}&key=${apiKey}`
         );
+        const forecastHourly = await axios.get(
+          `${hourlyUrl}?city=${inputSearch.value}&key=${apiKey}`
+        );
         const weatherData = new WeatherDataDaily(res.data);
         const weatherCard = new WeatherCardDaily(weatherData);
+        const weatherForecast = new WeatherForecastDaily(forecastRes.data);
         weatherContainer1.innerHTML = "";
         weatherContainer1.append(weatherCard.renderCurrent());
-        weatherContainer2.innerHTML = "<h5>Forecast for 16 days</h5> ";
-        forecastCont.innerHTML = "";
-        const weatherForecast = new WeatherForecastDaily(forecastRes.data);
-        weatherContainer2.append(forecastCont);
+        weatherContainer1.append(forecastCont);
+        forecastCont.innerHTML = "<h5>Forecast for 16 days</h5>";
         forecastCont.append(weatherForecast.renderForecast());
+        weatherContainer2.innerHTML = "";
+        hourlyCont.innerHTML = "";
+        weatherContainer2.innerHTML = "<h5>Forecast for 48 hours</h5> ";
+        const hourlyForecast = new WeatherForecastHourly(forecastHourly.data);
+        weatherContainer2.append(hourlyCont);
+        hourlyCont.append(hourlyForecast.renderForecastHourly());
         initializeScrollButtons();
+        initializeScrollButtonsHourly();
         const { lat, lon } = res.data.data[0];
         const popupContent = `
         <b>${weatherData.city}</b><br>
@@ -793,6 +813,7 @@ document
 document
   .querySelector(".dailyForecast")
   .addEventListener("click", async function () {
+    setActiveButton(this);
     const lastSearch = localStorage.getItem("lastSearch");
     if (lastSearch) {
       inputSearch.value = lastSearch;
@@ -851,3 +872,195 @@ function initializeScrollButtons() {
 }
 
 const forecastCont = document.querySelector(".forecastCont");
+
+class WeatherForecastHourly {
+  constructor(apiResponse) {
+    this.city = apiResponse.city_name;
+    this.country = apiResponse.country_code;
+    this.forecast = apiResponse.data.map((hour) => ({
+      date: hour.datetime,
+      temperature: Math.floor(hour.temp),
+      condition: hour.weather.description,
+      icon: hour.weather.icon,
+      realTemp: Math.floor(hour.app_temp),
+      humidity: hour.rh,
+      windSpeed: hour.wind_spd,
+      pressure: hour.pres,
+      uvindex: hour.uv,
+      maxTemp: Math.floor(hour.max_temp),
+      minTemp: Math.floor(hour.min_temp),
+    }));
+  }
+
+  getWeatherIcon(icon) {
+    return animatedWeatherIcons[icon] || "images/all/default-icon.svg";
+  }
+
+  renderForecastHourly() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "hourly-wrapper";
+
+    const leftButton = document.createElement("button");
+    leftButton.className = "scroll-button left hourly";
+    leftButton.innerHTML = `<i class="bi bi-caret-left-fill"></i>`;
+
+    const rightButton = document.createElement("button");
+    rightButton.className = "scroll-button right hourly";
+    rightButton.innerHTML = `<i class="bi bi-caret-right-fill"></i>`;
+
+    const hourlyContainer = document.createElement("div");
+    hourlyContainer.className = "hourly-container";
+
+    this.forecast.forEach((hour) => {
+      const dayCard = document.createElement("div");
+      dayCard.className = "forecast-card";
+      dayCard.innerHTML = `
+        <span class="forecast-date">${hour.date}</span>
+        <span class="forecast-img"><img class="forecast-icon" src="${this.getWeatherIcon(
+          hour.icon
+        )}"></span>
+        <span class="forecast-temp">${
+          hour.temperature
+        }°<span class="temp-unit">C</span></span>
+        
+        <span class="forecast-condition">${hour.condition}</span>
+      `;
+      hourlyContainer.appendChild(dayCard);
+    });
+
+    wrapper.appendChild(leftButton);
+    wrapper.appendChild(hourlyContainer);
+    wrapper.appendChild(rightButton);
+
+    return wrapper;
+  }
+
+  renderForecastCards() {
+    const forecastHourly = document.createElement("div");
+    forecastHourly.classList = "forecastHourly";
+    const bigCont = document.querySelector(".big-cont");
+
+    this.forecast.forEach((hour) => {
+      const hourlyContBig = document.createElement("div");
+      hourlyContBig.classList.add("hourly-cont-big");
+      hourlyContBig.innerHTML = `
+            <div class="weather-header">
+                <p id="city-name">${this.city}</p>
+                <span id="local-date">${hour.date}</span>
+            </div>
+            <div class="weather-value">
+                <div id="weather-info">
+                    <div class="weather-temps">
+                        <div class="weather-icon-container">
+                            <img class="weather-icon" src="${this.getWeatherIcon(
+                              hour.icon
+                            )}" />
+                        </div>
+                        <div class="weather-temp-all">
+                        <div class="weather-temp">
+                                    <span class="temperature">${
+                                      hour.temperature
+                                    }<span class="temp-circle">°</span></span>
+                                 <span class="celsius">C</span>
+                                 
+                                </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <p id="condition">${hour.condition}</p>
+                </div>
+                <div class="additional-info-table">
+                    <p class="spaced-content">
+                        <span class="weather-description">Humidity</span>
+                        <span class="table-value">${hour.humidity}%</span>
+                    </p>
+                    <p class="spaced-content">
+                        <span class="weather-description">Wind</span>
+                        <span class="table-value wind-speed">${
+                          hour.windSpeed
+                        } km/h</span>
+                    </p>
+                    <p class="spaced-content">
+                        <span class="weather-description">Pressure</span>
+                        <span class="table-value">${hour.pressure} hPa</span>
+                    </p>
+                    <p class="spaced-content">
+                        <span class="weather-description">UV Index Max</span>
+                        <span class="table-value">${hour.uvindex} of 11</span>
+                    </p>
+                </div>
+            </div>
+        `;
+      forecastHourly.appendChild(hourlyContBig);
+    });
+
+    return forecastHourly;
+  }
+}
+document
+  .querySelector(".hourlyForecast")
+  .addEventListener("click", async function () {
+    setActiveButton(this);
+    const lastSearch = localStorage.getItem("lastSearch");
+    if (lastSearch) {
+      inputSearch.value = lastSearch;
+    }
+    const apiKey = "05857751833645b2bbeb8c3f5d79234f";
+    const hourlyUrl = "https://api.weatherbit.io/v2.0/forecast/hourly";
+    weatherContainer1.innerHTML = "";
+    weatherContainer2.innerHTML = "";
+    contCities.style.display = "none";
+    mapExpand.style.display = `none`;
+    if (inputSearch.value) {
+      try {
+        const forecastHourly = await axios.get(
+          `${hourlyUrl}?city=${inputSearch.value}&key=${apiKey}`
+        );
+        const hourlyForecast = new WeatherForecastHourly(forecastHourly.data);
+        weatherContainer1.append(hourlyForecast.renderForecastCards());
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    }
+    form.reset();
+  });
+function initializeScrollButtonsHourly() {
+  const scrollContainer = document.querySelector(".hourly-container");
+  const scrollLeftButton = document.querySelector(".scroll-button.left.hourly");
+  const scrollRightButton = document.querySelector(
+    ".scroll-button.right.hourly"
+  );
+  const scrollAmount = 300;
+  scrollLeftButton.addEventListener("click", () => {
+    scrollContainer.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+  });
+  scrollRightButton.addEventListener("click", () => {
+    scrollContainer.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  });
+  function updateButtonVisibility() {
+    scrollLeftButton.style.display =
+      scrollContainer.scrollLeft === 0 ? "none" : "block";
+    scrollRightButton.style.display =
+      scrollContainer.scrollLeft + scrollContainer.offsetWidth >=
+      scrollContainer.scrollWidth
+        ? "none"
+        : "block";
+  }
+  scrollContainer.addEventListener("scroll", updateButtonVisibility);
+  updateButtonVisibility();
+  function updateButtonState() {
+    scrollLeftButton.disabled = scrollContainer.scrollLeft === 0;
+    scrollRightButton.disabled =
+      scrollContainer.scrollLeft + scrollContainer.offsetWidth >=
+      scrollContainer.scrollWidth;
+  }
+  scrollContainer.addEventListener("scroll", updateButtonState);
+  updateButtonState();
+}
+
+function setActiveButton(button) {
+  const buttons = document.querySelectorAll(".forecastButton");
+  buttons.forEach((btn) => btn.classList.remove("activeButton"));
+  button.classList.add("activeButton");
+}
